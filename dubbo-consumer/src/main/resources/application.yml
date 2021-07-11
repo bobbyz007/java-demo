@@ -1,0 +1,106 @@
+server:
+  port: 8083
+
+spring:
+  dataSource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://139.9.40.183:3306/testdb?characterEncoding=utf-8&useSSL=false
+    username: cloudmysql
+    password: xxxxxx
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    druid:
+      # 默认是0，一般数据库的连接数都有限制(show variables like 'max_connections';)，连接数过多消耗资源多，服务器可能撑不住
+      initialSize: 5
+      # 可以大些但不要超过20，数据库加锁时连接过多性能下降，默认是 8
+      maxActive: 20
+      # 最小空闲连接：回收空闲连接时，将保证至少有minIdle个连接. 建议与initialSize相同， 默认是 0
+      minIdle: 10
+      # @deprecated：最大空闲连接：连接池中容许保持空闲状态的最大连接数量，超过的空闲连接将被释放，如果设置为负数表示不限制，默认是 8
+      # maxIdle: 12
+      # 单位ms，程序向连接池中请求连接时,等待超过maxWait的值后无可用连接，认为本次请求失败，即连接池没有可用连接，设置-1时表示无限等待，默认为 -1
+      maxWait: 3000
+      # 单位ms, 空闲连接回收器线程 休眠的时间值，即每隔这个时间值空闲连接回收器线程回收空闲连接，非正整数时表示不进行检查，默认是 60*000 ms
+      timeBetweenEvictionRunsMillis: 5000
+      # 单位ms，连接池中的空闲连接 保持空闲 不被空闲连接回收器线程回收的 最小时间值，默认 1000*60*30 ms，即30 mins
+      # 即：连接空闲时间 大于 该值并且池中空闲连接大于minIdle 则关闭该连接
+      minEvictableIdleTimeMillis: 600000
+      # 单位ms，连接空闲时间大于该值，不管minIdle 都关闭该连接，默认1000L * 60L * 60L * 7，即7 hours
+      # 注意：还需要明确数据库的超时时间(show global variables like 'wait_timeout'; )，防止数据库先提前把连接关闭了
+      maxEvictableIdleTimeMillis: 900000
+
+      # 检查池中的连接是否仍可用的 SQL 语句,drui会连接到数据库执行该SQL, 如果正常返回，则表示连接可用，否则表示连接不可用，默认为null
+      # validationQuery为null时，testWhileIdle、testOnBorrow、testOnReturn都不起作用
+      validationQuery: SELECT 1
+      # 建议配置为true，不影响性能，并且保证安全性。如果为true，当应用向连接池申请连接，并且testOnBorrow为false时，连接池将会判断连接是否处于空闲状态，
+      # 即如果空闲时间大于 timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。如果无效，则关闭该连接。 默认为true。
+      testWhileIdle: true
+      # 如果为true，当应用向连接池申请连接时，连接池会判断这条连接是否是可用的，如果不可用，则关闭该连接。 默认为false
+      # 注意： 设置为true时，每次获取连接的时候都要到数据库验证连接有效性，在高并发的时候会造成性能下降
+      testOnBorrow: false
+      # 如果为true，当应用使用完连接，连接池回收连接的时候会判断该连接是否还可用。默认false
+      # 注意：设置为true时，在高并发的时候会造成性能下降
+      testOnReturn: false
+      # 是否保持长连接，默认为false。即当连接的空闲时间大于 keepAliveBetweenTimeMillis（默认1分钟），但是小于 minEvictableIdleTimeMillis（默认30分钟），
+      # Druid会通过调用validationQuery保持该连接的有效性。当连接空闲时间大于 minEvictableIdleTimeMillis，Druid会直接将该连接关闭，keepAlive会无效。
+      keepAlive: false
+      filters: stat,log4j
+  redis:
+    # 网络环境不好，超时适当调大点
+    timeout: 10000
+    connectTimeout: 20000
+    password: xxxxxx
+    cluster:
+      nodes:
+        - 139.9.40.183:6390
+        - 139.9.40.183:6391
+        - 139.9.40.183:6392
+        - 139.9.40.183:6393
+        - 139.9.40.183:6394
+        - 139.9.40.183:6395
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  # resultType配置时所在的包位置
+  type-aliases-package: com.example.entity
+  configuration:
+    # like column:user_name, property:userName
+    map-underscore-to-camel-case: true
+nacos:
+  config:
+    # 主配置; 主要是加载 静态配置 文件的; SpringBoot在启动的时候会先去Nacos中读取配置文件然后加载到Environment中; 静态配置不启用自动刷新;
+    bootstrap:
+      #log-enable: true #支持日志级别的加载时机，控制台会打印很多日志
+      enable: true #开启配置预加载功能
+    server-addr: 139.9.40.183:8848
+    username: nacos
+    password: xxxxxx
+    # 主配置 data-ids  (可以配置多个,如果多个配置文件中有相同的 属性 则优先取最前面的值)
+    data-ids: test-data,test-data2
+    group-id: DEFAULT_GROUP
+    namespace: public # 命名空间
+    type: properties #yaml or whatever
+    max-retry: 10
+    config-retry-time: 2333
+    config-long-poll-timeout: 30000 # 配置监听长轮询超时时间
+    auto-refresh: true #是否开启自动刷新 (false:不监听属性变化,true:监听属性变化,但是对应的属性注解上也必须设置autoRefreshed = true才可以实时更新)
+    remote-first: true # nacos配置优先于本地配置
+dubbo:
+  application:
+    name: dubbo-consumer
+  registry:
+    protocol: dubbo
+    address: nacos://139.9.40.183:8848
+    register: false # 消费者不用注册到注册中心
+    use-as-config-center: true
+    use-as-metadata-center: true
+  protocol:
+    name: dubbo
+    port: 20881 # -1: 端口自增
+    threads: 200
+    queues: 100
+    threadpool: cached
+  provider:
+    retries: 3
+    threadpool: cached
+    threads: 200
+    connections: 100

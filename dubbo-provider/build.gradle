@@ -1,0 +1,57 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.12.RELEASE' // nacos不兼容最新版本 2.5.2
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'war'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+sourceCompatibility = '11'
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // 包含管理服务，比如应用健康检查等等 http://localhost:8081/actuator/health
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // mybatis starter
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+    // mysql driver
+    runtimeOnly 'mysql:mysql-connector-java:8.0.25'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.16.0'
+
+    // alibaba druid db connect pool
+    implementation 'com.alibaba:druid-spring-boot-starter:1.2.6'
+
+    // alibaba nacos
+    implementation 'com.alibaba.boot:nacos-config-spring-boot-starter:0.2.8'
+
+    // dubbo
+    implementation 'org.apache.dubbo:dubbo-spring-boot-starter:3.0.1'
+    implementation 'org.apache.dubbo:dubbo-registry-nacos:3.0.1'
+    implementation 'org.apache.dubbo:dubbo-configcenter-nacos:3.0.1'
+    implementation 'org.apache.dubbo:dubbo-metadata-report-nacos:3.0.1'
+
+    // dubbo集成sentinel
+    implementation group: 'com.alibaba.csp', name: 'sentinel-apache-dubbo-adapter', version: '1.8.2'
+    // 接入sentinel dashboard
+    implementation group: 'com.alibaba.csp', name: 'sentinel-transport-simple-http', version: '1.8.2'
+
+
+    implementation project(":dubbo-interface")
+
+    implementation 'log4j:log4j:1.2.17'
+
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation 'org.jsoup:jsoup:1.13.1'
+    implementation 'org.apache.poi:poi:4.1.2'
+    implementation 'org.apache.poi:poi-ooxml:4.1.2'
+    implementation group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.10.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+}
+
+test {
+    useJUnitPlatform()
+}
