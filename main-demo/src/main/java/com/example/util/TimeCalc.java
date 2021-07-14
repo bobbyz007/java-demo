@@ -32,6 +32,6 @@ public class TimeCalc {
             }
         }
 
-        System.out.println("time: " + count);
+        System.out.println("left time: " + count);
     }
 }

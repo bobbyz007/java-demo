@@ -1,4 +1,4 @@
-package com.example.concurrent;
+package com.example.concurrent.util;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
