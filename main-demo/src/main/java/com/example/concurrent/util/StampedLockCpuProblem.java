@@ -3,6 +3,11 @@ package com.example.concurrent.util;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.StampedLock;
 
+/**
+ * 经验证： cpu 100%问题在jdk 11上运行已经不存在此问题。
+ *
+ * 可能在jdk 8开始版本存在此问题。
+ */
 public class StampedLockCpuProblem {
     public static void main(String[] args) throws InterruptedException {
         System.out.println("Showing stamped problem");

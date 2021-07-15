@@ -8,9 +8,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * 经验证： cpu 100%问题在jdk 11上运行已经不存在此问题。
- *
- * 可能在jdk 8开始版本存在此问题。
+ * showing reentrant lock example
  */
 public class LockExample {
     //请求总数
