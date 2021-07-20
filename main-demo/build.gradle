@@ -11,6 +11,9 @@ sourceCompatibility = '11'
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    // aop support
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
     // 包含管理服务，比如应用健康检查等等 http://localhost:8081/actuator/health
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // mybatis starter
