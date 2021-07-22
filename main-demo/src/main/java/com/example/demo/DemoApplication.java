@@ -45,8 +45,9 @@ public class DemoApplication {
 	@Bean
 	public CommandLineRunner runConsumeRest(RestTemplate restTemplate) throws Exception {
 		return args -> {
-			Quote quote = restTemplate.getForObject(
-					"https://quoters.apps.pcfone.io/api/random", Quote.class);
+			/*Quote quote = restTemplate.getForObject(
+					"https://quoters.apps.pcfone.io/api/random", Quote.class);*/
+			Quote quote = new Quote();
 			log.info(quote.toString());
 		};
 	}

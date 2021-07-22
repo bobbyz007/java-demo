@@ -14,6 +14,7 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -25,7 +26,7 @@ import java.util.List;
 public class LimitAspect {
     private static final Logger logger = LoggerFactory.getLogger(LimitAspect.class);
 
-    @Autowired
+    @Resource(name = "limitRedisTemplate")
     private RedisTemplate<String, Serializable> redisTemplate;
 
     @Autowired
@@ -93,6 +94,7 @@ public class LimitAspect {
 
             List<String> keys = Collections.singletonList(stringBuffer.toString());
             // 执行 lua 脚本
+            // 注意：整型参数不需要转成字符串，否则传递到lua脚本中tonumber函数会返回null
             Number number = redisTemplate.execute(redisScript, keys, rateLimit.count(), rateLimit.time());
 
             // 非0表示 正常访问
