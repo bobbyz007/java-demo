@@ -1,8 +1,5 @@
 package com.example.concurrent.deadlock;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * 解决死锁： 破坏请求与保持条件，即一次性申请所需要的所有资源
  *
@@ -17,14 +14,14 @@ import java.util.concurrent.locks.ReentrantLock;
  * 4. 循环等待条件
  *  即存在 A等待B，B等待A的情况
  */
-public class TransferAccountWithoutDeadlock2 {
+public class TransferAccountWithoutDeadlock2WaitNofity {
     private String id;
     //账户的余额
     private Integer balance;
 
-    private static ResourcesRequester requester = ResourcesRequester.getInstance();
+    private static ResourcesRequester2 requester = ResourcesRequester2.getInstance();
 
-    public TransferAccountWithoutDeadlock2(String id, Integer balance) {
+    public TransferAccountWithoutDeadlock2WaitNofity(String id, Integer balance) {
         this.id = id;
         this.balance = balance;
     }
@@ -35,12 +32,10 @@ public class TransferAccountWithoutDeadlock2 {
     }
 
     //转账操作
-    public void transfer(TransferAccountWithoutDeadlock2 target, Integer transferMoney) throws InterruptedException {
-        //自旋申请转出账户和转入账户，直到成功
-        while(!requester.applyResources(this, target)){
-            //循环体为空 或 休眠一会
-            Thread.sleep(10);
-        }
+    public void transfer(TransferAccountWithoutDeadlock2WaitNofity target, Integer transferMoney) throws InterruptedException {
+        // 并发冲突很严重的情况下，原来自旋循坏申请资源的方式存在性能问题
+        // 此处重构为等待通知机制
+        requester.applyResources(this, target);
 
         try{
             //对转出账户加锁
@@ -61,8 +56,8 @@ public class TransferAccountWithoutDeadlock2 {
     }
 
     public static void main(String[] args) {
-        TransferAccountWithoutDeadlock2 accountA = new TransferAccountWithoutDeadlock2("A", 10);
-        TransferAccountWithoutDeadlock2 accountB = new TransferAccountWithoutDeadlock2("B", 20);
+        TransferAccountWithoutDeadlock2WaitNofity accountA = new TransferAccountWithoutDeadlock2WaitNofity("A", 10);
+        TransferAccountWithoutDeadlock2WaitNofity accountB = new TransferAccountWithoutDeadlock2WaitNofity("B", 20);
         new Thread(() -> {
             try {
                 accountA.transfer(accountB, 5);
