@@ -1,4 +1,4 @@
-package com.example.concurrent.limit.spring;
+package com.example.concurrent.limit.distribute.spring;
 
 import org.redisson.spring.data.connection.RedissonConnectionFactory;
 import org.springframework.context.annotation.Bean;

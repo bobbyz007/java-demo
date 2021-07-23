@@ -1,6 +1,6 @@
-package com.example.concurrent.limit.spring;
+package com.example.concurrent.limit.distribute.spring;
 
-import com.example.concurrent.limit.spring.annotation.RateLimit;
+import com.example.concurrent.limit.distribute.spring.annotation.MyDistributedRateLimiter;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -23,8 +23,8 @@ import java.util.List;
 
 @Configuration
 @Aspect
-public class LimitAspect {
-    private static final Logger logger = LoggerFactory.getLogger(LimitAspect.class);
+public class DistributedLimitAspect {
+    private static final Logger logger = LoggerFactory.getLogger(DistributedLimitAspect.class);
 
     @Resource(name = "limitRedisTemplate")
     private RedisTemplate<String, Serializable> redisTemplate;
@@ -80,22 +80,24 @@ public class LimitAspect {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         Class<?> targetClass = method.getDeclaringClass();
-        RateLimit rateLimit = method.getAnnotation(RateLimit.class);
+        MyDistributedRateLimiter myDistributedRateLimiter = method.getAnnotation(MyDistributedRateLimiter.class);
 
-        if (rateLimit != null) {
+        if (myDistributedRateLimiter != null) {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             String ipAddr = getIpAddr(request);
 
             StringBuffer stringBuffer = new StringBuffer();
+            // 加入hash tag:{tag}处理，防止落入集群的不同slot而抛出异常：Lua script attempted to access a non local key in a cluster node
             stringBuffer.append(ipAddr).append("-")
                     .append(targetClass.getName()).append("- ")
-                    .append(method.getName()).append("-")
-                    .append(rateLimit.key());
+                    .append(method.getName()).append("-{")
+                    .append(myDistributedRateLimiter.key())
+                    .append("}");
 
             List<String> keys = Collections.singletonList(stringBuffer.toString());
             // 执行 lua 脚本
             // 注意：整型参数不需要转成字符串，否则传递到lua脚本中tonumber函数会返回null
-            Number number = redisTemplate.execute(redisScript, keys, rateLimit.count(), rateLimit.time());
+            Number number = redisTemplate.execute(redisScript, keys, myDistributedRateLimiter.count(), myDistributedRateLimiter.time());
 
             // 非0表示 正常访问
             if (number != null && number.intValue() != 0) {
