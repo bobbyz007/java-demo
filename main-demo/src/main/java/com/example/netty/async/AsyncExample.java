@@ -30,8 +30,13 @@ public class AsyncExample {
         executor.submit(() -> {
             try {
                 Thread.sleep(5000);
-            } catch (InterruptedException e) {
+                System.out.println("线程执行......");
+                System.out.println(1/0);
+                // 注意：如果代码中存在catch不了的异常，会导致promise无法设置成功或失败结果，导致promise.sync一直在等待。
+                // 建议，无论是否能捕获异常，都需要设置promise
+            } catch (InterruptedException | ArithmeticException e) {
                 e.printStackTrace();
+                promise.setFailure(e);
             }
 
             // 设置 promise 的结果

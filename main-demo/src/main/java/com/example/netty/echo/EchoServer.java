@@ -48,8 +48,10 @@ public final class EchoServer {
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         final EchoServerHandler serverHandler = new EchoServerHandler();
+        final EchoServerHandler2 serverHandler2 = new EchoServerHandler2();
         try {
             ServerBootstrap b = new ServerBootstrap();
+
             b.group(bossGroup, workerGroup)
              .channel(NioServerSocketChannel.class)
              .option(ChannelOption.SO_BACKLOG, 100)
@@ -63,6 +65,15 @@ public final class EchoServer {
                      }
                      //p.addLast(new LoggingHandler(LogLevel.INFO));
                      p.addLast(serverHandler);
+
+                     // testing add another ChannelInitializer
+                     p.addLast(new ChannelInitializer<SocketChannel>() {
+                         @Override
+                         protected void initChannel(SocketChannel ch) throws Exception {
+                             ChannelPipeline p = ch.pipeline();
+                             p.addLast(serverHandler2);
+                         }
+                     });
                  }
              });
 
