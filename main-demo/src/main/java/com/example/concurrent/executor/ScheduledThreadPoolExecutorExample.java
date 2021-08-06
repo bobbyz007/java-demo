@@ -4,7 +4,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class ScheduledThreadPoolExecutorTest {
+public class ScheduledThreadPoolExecutorExample {
     public static void main(String[] args) throws InterruptedException {
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
