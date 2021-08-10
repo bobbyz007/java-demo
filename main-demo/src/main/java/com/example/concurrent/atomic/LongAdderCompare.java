@@ -44,7 +44,11 @@ public class LongAdderCompare {
         System.out.println("count:" + adder.intValue() + " with time elapsed(ms): " + stopwatch.elapsed(TimeUnit.MILLISECONDS));
     }
     private static void add(){
-        adder.add(1);
-        //adder.addAndGet(1);
+        // 每个线程执行N次累加, N取值为100,1000,10000, 50000, 100000
+        final int N = 50000;
+        for (int i = 0; i < N; i++) {
+            adder.add(1);
+            // adder.addAndGet(1);
+        }
     }
 }
