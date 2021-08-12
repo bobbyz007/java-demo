@@ -1,12 +1,12 @@
 package com.example.netty.util;
 
-import com.alibaba.nacos.common.utils.LoggerUtils;
 import com.google.common.base.Strings;
 import io.netty.buffer.*;
 import io.netty.channel.ChannelId;
 import io.netty.channel.DefaultChannelId;
 import io.netty.util.ByteProcessor;
 import io.netty.util.internal.ObjectPool;
+import io.netty.util.internal.shaded.org.jctools.util.Pow2;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -25,7 +25,62 @@ public class NettyUtil {
         // bufView();
         // bufCopy();
 
-        referenceCounted();
+        // referenceCounted();
+        // alignment();
+
+        sizeClasses();
+    }
+
+    // 理解SizeClasses原理
+    static void sizeClasses() {
+        PooledByteBufAllocatorMetric allocatorMetric = PooledByteBufAllocator.DEFAULT.metric();
+        final int SIZE_IDX_MAX = 75;
+        final int PAGE_IDX_MAX = 39;
+        final int SMALL_SIZE_IDX_MAX = 38;
+        if (allocatorMetric.numDirectArenas() > 0) {
+            // any pool arena
+            PoolArenaMetric arenaMetric = allocatorMetric.directArenas().get(0);
+
+            System.out.println("--------------------------------------------------------------------------");
+            // sizeidx -> size
+            for (int i = 0; i <= SIZE_IDX_MAX; i++) {
+                int size = arenaMetric.sizeIdx2size(i);
+                int sizeCompute = arenaMetric.sizeIdx2sizeCompute(i);
+                System.out.println(Strings.lenientFormat("sizeIdx: %s, size: %s, sizeCompute: %s, equal: %s",
+                        i, size, sizeCompute, size == sizeCompute));
+            }
+
+            System.out.println("--------------------------------------------------------------------------");
+            // pageidx -> size
+            for (int i = 0; i <= PAGE_IDX_MAX; i++) {
+                long size = arenaMetric.pageIdx2size(i);
+                long sizeCompute = arenaMetric.pageIdx2sizeCompute(i);
+                System.out.println(Strings.lenientFormat("pageIdx: %s, size: %s, sizeCompute: %s (KB), equal: %s",
+                        i, size, sizeCompute / 8 / 1024, size == sizeCompute));
+            }
+
+            System.out.println("--------------------------------------------------------------------------");
+            // size -> sizeIdx
+            // 大于size的最小sizeIdx，即申请到的大小要大于 请求的大小。
+            for (int size : new int[]{8, 640, 642}) {
+                System.out.println(Strings.lenientFormat("size: %s -> sizeIdx: %s", size, arenaMetric.size2SizeIdx(size)));;
+            }
+
+            System.out.println("--------------------------------------------------------------------------");
+            // page -> pageIdx
+            // 此处的pages参数是申请的页面个数，每个页面大小默认为1KB。默认支持2048个page大小申请，即最大2M，这也是normal支持申请的最大内存。
+            for (int pages : new int[]{1, 2, 5, 320, 321, 2048, 2049, 2050}) {
+                System.out.println(Strings.lenientFormat("pages: %s -> pageIdx: %s, pageIdxFloor: %s",
+                        pages, arenaMetric.pages2pageIdx(pages), arenaMetric.pages2pageIdxFloor(pages)));;
+            }
+
+            // 即把size规格化为size classes表格中的size大小。 比如8规划化到最小的16，640本身已经是size classes中的大小，直接返回；
+            // 642则规格化为大于它的 768
+            System.out.println("--------------------------------------------------------------------------");
+            for (int size : new int[]{8, 640, 642}) {
+                System.out.println(Strings.lenientFormat("size: %s -> normalizedSize: %s", size, arenaMetric.normalizeSize(size)));;
+            }
+        }
     }
 
     /**
@@ -191,5 +246,10 @@ public class NettyUtil {
         buf.release();
 
         System.out.println("refCnt released: " + buf.refCnt());
+    }
+
+    static void alignment() {
+        // 求出最小的 (n * alignment) >= value，其中 n是大于等于1的整数
+        System.out.println(Pow2.align(33, 32));
     }
 }
