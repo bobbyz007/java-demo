@@ -6,10 +6,12 @@ import io.netty.channel.ChannelId;
 import io.netty.channel.DefaultChannelId;
 import io.netty.util.ByteProcessor;
 import io.netty.util.internal.ObjectPool;
+import io.netty.util.internal.PlatformDependent;
 import io.netty.util.internal.shaded.org.jctools.util.Pow2;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Queue;
 
 public class NettyUtil {
     public static void main(String[] args) throws InterruptedException {
@@ -28,7 +30,64 @@ public class NettyUtil {
         // referenceCounted();
         // alignment();
 
-        sizeClasses();
+        // sizeClasses();
+        // pooledBuf();
+
+        freePooledBuf();
+    }
+
+    // 释放内存： 最终调用PoolArena的free方法
+    // 对于small类型，基本上都会成功地 添加到线程私有的PoolThreadCache 缓存中
+    // 对于normal规格，会根据maxCachedBufferCapacity大小 来确定缓存数组大小，不一定都会放到缓存中
+    static void freePooledBuf() {
+        // 回收时 会放到PoolThreadCache缓存中
+        ByteBuf smallBuf1 = PooledByteBufAllocator.DEFAULT.buffer(700);
+        ByteBuf smallBuf2 = PooledByteBufAllocator.DEFAULT.buffer(700);
+        ByteBuf smallBuf3 = PooledByteBufAllocator.DEFAULT.buffer(700);
+        // 一般情况下， small类型内存回收会 存储在PoolThreadCache的缓存中，不过随着分配次数的增多(超过阈值DEFAULT_CACHE_TRIM_INTERVAL)，
+        // 如果缓存一直没用，则会清理掉不用的缓存。 然后重新开始计算分配次数，周而复始。
+        smallBuf2.release();
+        smallBuf3.release();
+        ByteBuf smallBuf4 = PooledByteBufAllocator.DEFAULT.buffer(700);
+        ByteBuf smallBuf5 = PooledByteBufAllocator.DEFAULT.buffer(700);
+
+        // 此时PoolChunk的runsAvail： runOffset=3， pages=2045
+        ByteBuf normalBuf1 = PooledByteBufAllocator.DEFAULT.buffer(50000);
+        // 上述runSize需要7个page，此时PoolChunk的runsAvail： runOffset=10， pages=2038
+        ByteBuf normalBuf2 = PooledByteBufAllocator.DEFAULT.buffer(60000);
+        // 上述runSize需要8个page，此时PoolChunk的runsAvail： runOffset=18， pages=2030
+
+        normalBuf1.release();
+        // 释放后，此时PoolChunk的runsAvail有2段： runOffset=3， pages=7; runOffset=18， pages=2030
+
+        normalBuf2.release();
+        // 释放后，需要与runsAvail的前后两段合并： 组成一段： runOffset=3， pages=2045
+    }
+
+    static void pooledBuf() {
+        // 按默认申请 256字节
+        ByteBuf smallBuf1 = PooledByteBufAllocator.DEFAULT.buffer();
+        ByteBuf smallBuf2 = PooledByteBufAllocator.DEFAULT.buffer();
+        ByteBuf smallBuf3 = PooledByteBufAllocator.DEFAULT.buffer();
+
+        ByteBuf cusSmallBuf1 = PooledByteBufAllocator.DEFAULT.buffer(700);
+        // 模拟一个PoolSubpage分配不了的情况
+        // runSize: 3*pageSize，每个element大小为768，sizeIdx为17， 可分配的element个数为 3*8192 / 768 = 32个
+        for (int i = 0; i < 34; i++) {
+            ByteBuf tmpSmallBuf = PooledByteBufAllocator.DEFAULT.buffer(700);
+        }
+
+        // 分配normal规格的内存：sizeIdx >= 39 (32KB)
+        ByteBuf normalBuf1 = PooledByteBufAllocator.DEFAULT.buffer(50000);
+
+        ByteBuf normalBuf2 = PooledByteBufAllocator.DEFAULT.buffer(14_000_000);
+        // 模拟一个chunk容纳不下的情况，chunkSize默认为： 16_777_216
+        // 此时当前的PoolChunkList都无法分配，会重新创建一个PoolChunk进行分配
+        ByteBuf normalBuf3 = PooledByteBufAllocator.DEFAULT.buffer(14_000_000);
+
+        // huge规格内存：大于size class类型，即申请内存大于 16M
+        // huge规格内存分配不会池化，因为太大了没有意义。
+        ByteBuf hugeBuf1 = PooledByteBufAllocator.DEFAULT.buffer(17_000_000);
     }
 
     // 理解SizeClasses原理
