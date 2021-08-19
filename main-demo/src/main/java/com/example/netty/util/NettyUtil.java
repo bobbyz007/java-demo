@@ -5,6 +5,7 @@ import io.netty.buffer.*;
 import io.netty.channel.ChannelId;
 import io.netty.channel.DefaultChannelId;
 import io.netty.util.ByteProcessor;
+import io.netty.util.ResourceLeakDetectorFactory;
 import io.netty.util.internal.ObjectPool;
 import io.netty.util.internal.PlatformDependent;
 import io.netty.util.internal.shaded.org.jctools.util.Pow2;
@@ -32,8 +33,27 @@ public class NettyUtil {
 
         // sizeClasses();
         // pooledBuf();
+        //freePooledBuf();
 
-        freePooledBuf();
+        resourceLeakTracker();
+    }
+
+    static void resourceLeakTracker() throws InterruptedException {
+        // 设置采用开关：io.netty.leakDetection.samplingInterval=1，保证每次分配都监控资源泄漏
+        ByteBuf smallBuf1 = PooledByteBufAllocator.DEFAULT.buffer(700);
+        ByteBuf smallBuf2 = PooledByteBufAllocator.DEFAULT.buffer(700);
+
+        // 模拟方法退出后，不主动释放申请的ByteBuf，gc时会会放到回收队列，即检测出没有调用release方法，存在内存泄漏问题。
+        smallBuf1 = null;
+
+        // 调用release时，会调用DefaultResourceLeak的close方法，清理弱引用。因此gc时不会放到回收队列
+        // smallBuf1.release();
+
+        System.gc();
+
+        // 等待2s，GC回收对象。在申请内存时 会调用 ResourceLeakDetector 的 track()方法时，会检测到发生内存泄漏
+        Thread.sleep(2000);
+        ByteBuf smallBuf3 = PooledByteBufAllocator.DEFAULT.buffer(700);
     }
 
     // 释放内存： 最终调用PoolArena的free方法
