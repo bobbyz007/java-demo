@@ -32,12 +32,12 @@ public class EchoServerHandler2 extends ChannelInboundHandlerAdapter {
         ByteBuf in = (ByteBuf) msg;
         System.out.println(
                 "Another Server received: " + in.toString(CharsetUtil.UTF_8));
-        ctx.write(msg);
+        // 注意：不能和其他handler重复写同一个msg，在flush的时候netty会报异常
+        // ctx.write(msg);
     }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
-        ctx.flush();
     }
 
     @Override

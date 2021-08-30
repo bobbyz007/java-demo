@@ -2,20 +2,37 @@ package com.example.netty.util;
 
 import com.google.common.base.Strings;
 import io.netty.buffer.*;
-import io.netty.channel.ChannelId;
-import io.netty.channel.DefaultChannelId;
-import io.netty.util.ByteProcessor;
-import io.netty.util.ResourceLeakDetectorFactory;
+import io.netty.channel.*;
+import io.netty.channel.nio.NioEventLoop;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.resolver.AbstractAddressResolver;
+import io.netty.resolver.AddressResolver;
+import io.netty.resolver.DefaultNameResolver;
+import io.netty.util.*;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GlobalEventExecutor;
 import io.netty.util.internal.ObjectPool;
 import io.netty.util.internal.PlatformDependent;
+import io.netty.util.internal.TypeParameterMatcher;
 import io.netty.util.internal.shaded.org.jctools.util.Pow2;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class NettyUtil {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
         // channelId();
 
         // recycle();
@@ -33,9 +50,143 @@ public class NettyUtil {
 
         // sizeClasses();
         // pooledBuf();
-        //freePooledBuf();
+        // freePooledBuf();
 
-        resourceLeakTracker();
+        // resourceLeakTracker();
+
+        // attributeMap();
+
+        // eventLoopGroup();
+
+        // nameResolver();
+
+        globalEventExecutor();
+
+        channelOutboundBuffer();
+
+        misc();
+    }
+
+    /**
+     * GlobalEventExecutor
+     */
+    static void globalEventExecutor() {
+
+    }
+
+    /**
+     * ChannelOutboundBuffer： write的缓存
+     */
+    static void channelOutboundBuffer() {
+
+    }
+
+    /**
+     * 主要演示 TypeParameterMatcher 用法： 主要是用来确定一个对象的 具体泛型类型参数的Class，比如
+     *  class B extends A<String>
+     *  class C extends A<Integer>
+     *  则B b对象的具体类型是 String.class，C c对象的具体类型是 Integer.class
+     * 一般用于父类的统一逻辑处理：判断具体子类要处理的数据 是否与 泛型类型参数匹配。 比如上例的对象b 只能处理 String类型数据，而对象c只能处理Integer类型数据
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
+    static void nameResolver() throws ExecutionException, InterruptedException {
+        EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+        // 创建name resolver， 其实就是解析主机名或ip字符串 -> InetAddress
+        DefaultNameResolver resolver = new DefaultNameResolver(eventLoopGroup.next());
+
+        Future<InetAddress> future = resolver.resolve("127.0.0.1");
+        System.out.println("inet address(ip): " + future.get());
+
+        // address resolver，其实就是ip+port， ip的解析依靠name resolver， 再加上port即可创建合法的 new InetSocketAddress
+        AddressResolver<InetSocketAddress> addressResolver = resolver.asAddressResolver();
+        Future<InetSocketAddress> inetSocketFuture = addressResolver.resolve(InetSocketAddress.createUnresolved("127.0.0.1", 8080));
+        InetSocketAddress inetSocketAddress = inetSocketFuture.get();
+        System.out.println("inet socket address: " + inetSocketAddress);
+
+        // 匹配器： 验证某个类型是否匹配某个泛型参数。
+        // 比如 addressResolver的类型是 AddressResolver<InetSocketAddress> 继承-> AbstractAddressResolver<T extends SocketAddress>
+        // 此时泛型参数T的实际类型是 InetSocketAddress，那么match时只能匹配InetSocketAddress或其子类型。
+        // 换句话说，就是找到addressResolver对象 对应泛型参数T的实际Class类型
+        TypeParameterMatcher matcher = TypeParameterMatcher.find(addressResolver, AbstractAddressResolver.class, "T");
+        System.out.println("type parameter match: " + matcher.match(inetSocketAddress));
+
+        C c = new C();
+        // 找到对象c，在祖先类AC1.class下的 泛型S的具体Class类型
+        TypeParameterMatcher matcher1 = TypeParameterMatcher.find(c, AC1.class, "S");
+        System.out.println("type parameter match: " + matcher1.match(new N1()));
+        System.out.println("type parameter match: " + matcher1.match(new N2()));
+
+        // 对于数组类型参数，不支持T[]， 只支持 List<T>[]
+        TypeParameterMatcher matcher2 = TypeParameterMatcher.find(c, AC1.class, "T");
+        System.out.println("type parameter match: " + matcher2.match(new List[0]));
+    }
+
+    interface I<A extends AutoCloseable, S, T> {
+    }
+    static abstract class AC1<S extends Number, T> implements I<InputStream, S, T> {
+    }
+    // 继承类似下面会有问题：extends AC1<S, T[]> ，这样得到的T不是Class类型，netty会报异常。
+    static abstract class AC2<S extends AtomicInteger, T extends Exception> extends AC1<S, List<T>[]> {
+    }
+
+    static class C extends AC2<N1, FileNotFoundException> {
+    }
+    static class N1 extends AtomicInteger {
+    }
+    static class N2 extends N1 {
+    }
+
+    static void eventLoopGroup() throws InterruptedException, ExecutionException {
+        EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+
+        // 固定在某一个event loop中执行
+        eventLoopGroup.schedule(() -> {
+            System.out.println("schedule running one-shot: " + Thread.currentThread().getName());
+        }, 2, TimeUnit.SECONDS);
+
+        // 固定在一个event loop中执行
+        eventLoopGroup.scheduleAtFixedRate(() -> {
+            System.out.println("schedule running at fixed rate： " + Thread.currentThread().getName());
+        }, 1, 1, TimeUnit.SECONDS);
+
+        // 模拟event loop group工作10s
+        Thread.sleep(10000);
+
+        // 优雅关闭loop group
+        // 默认2s安静时间（即线程继续监控队列中是否有任务处理），15s的超时时间
+        eventLoopGroup.shutdownGracefully();
+
+        // 结果为null，表示无异常
+        System.out.println("terminated: " + eventLoopGroup.terminationFuture().get());
+        System.out.println("terminated: " + eventLoopGroup.awaitTermination(3, TimeUnit.SECONDS));
+    }
+
+    static void misc() {
+        AdaptiveRecvByteBufAllocator adaptiveRecvByteBufAllocator = new AdaptiveRecvByteBufAllocator();
+        AdaptiveRecvByteBufAllocator allocator = new AdaptiveRecvByteBufAllocator(63, 127, 65536);
+
+        RecvByteBufAllocator.ExtendedHandle handle = (RecvByteBufAllocator.ExtendedHandle)
+                allocator.newHandle();
+        // 主要是判断 预估读取的数据 和 上次实际读取的数据比较， 来判断是否还需要读数据：
+        // 比如： 如果两者相等，表示可能还有数据，因为预估读取的数据填满了； 否则就是没有数据可读
+        // handle.attemptedBytesRead();
+        // handle.lastBytesRead();
+        ByteBuf buf = handle.allocate(PooledByteBufAllocator.DEFAULT);
+    }
+
+    static void attributeMap() {
+        AttributeMap attributeMap = new DefaultAttributeMap();
+        // AttributeKey 属性键 可以共享
+        attributeMap.attr(AttributeKey.valueOf("attr1"));
+        attributeMap.attr(AttributeKey.newInstance("attr2"));
+
+        // Attribute 保存了属性值
+        Attribute<String> attr1 = attributeMap.attr(AttributeKey.valueOf("attr1"));
+        Attribute<String> attr2 = attributeMap.attr(AttributeKey.valueOf("attr2"));
+        Attribute<String> attr3 = attributeMap.attr(AttributeKey.valueOf("attr3"));
+        attr3.set("value3");
+        System.out.println(attr3.get());
     }
 
     static void resourceLeakTracker() throws InterruptedException {
