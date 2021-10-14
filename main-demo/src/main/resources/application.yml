@@ -47,7 +47,7 @@ spring:
       filters: stat,log4j
   redis:
     # 网络环境不好，超时适当调大点
-    timeout: 10000
+    timeout: 20000
     connectTimeout: 20000
     password: xxxxxx
     cluster:

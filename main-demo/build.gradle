@@ -1,3 +1,5 @@
+import org.gradle.process.internal.JvmOptions
+
 plugins {
     id 'org.springframework.boot' version '2.3.12.RELEASE' // nacos不兼容最新版本 2.5.2
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -39,6 +41,14 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
     implementation group: 'commons-io', name: 'commons-io', version: '2.10.0'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    implementation group: 'io.netty', name: 'netty-codec-http', version: '4.1.65.Final'
+    implementation group: 'org.openjdk.jol', name: 'jol-cli', version: '0.16'
+    implementation group: 'com.alibaba.csp', name: 'sentinel-core', version: '1.8.2'
+    implementation group: 'com.alibaba.csp', name: 'sentinel-transport-simple-http', version: '1.8.2'
+}
+
+bootRun{
+    jvmArgs "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
 }
 
 test {
