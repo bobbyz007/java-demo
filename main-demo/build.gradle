@@ -47,6 +47,9 @@ dependencies {
     implementation group: 'com.alibaba.csp', name: 'sentinel-transport-simple-http', version: '1.8.2'
     implementation group: 'org.apache.curator', name: 'curator-framework', version: '5.2.0'
     implementation group: 'org.apache.curator', name: 'curator-recipes', version: '5.2.0'
+
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 }
 
 bootRun{
