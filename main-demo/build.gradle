@@ -50,6 +50,10 @@ dependencies {
 
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+
+    implementation "io.github.resilience4j:resilience4j-circuitbreaker:1.7.1"
+    implementation "io.github.resilience4j:resilience4j-bulkhead:1.7.1"
+    implementation "io.github.resilience4j:resilience4j-retry:1.7.1"
 }
 
 bootRun{
