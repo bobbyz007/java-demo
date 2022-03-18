@@ -1,4 +1,4 @@
-package com.example.clazz;
+package com.example.clazz.classloader;
 
 public class ClassLoaderExample {
     public static void main(String[] args) throws ClassNotFoundException {
@@ -16,6 +16,16 @@ public class ClassLoaderExample {
 
     static void misc() {
         System.out.println("current classloader: " + Thread.currentThread().getContextClassLoader());
+
+        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+        ClassLoader platformClassLoader = ClassLoader.getPlatformClassLoader();
+        System.out.println("system: " + systemClassLoader);
+        System.out.println("platform: " + platformClassLoader);
+
+        System.out.println("system: " + ClassLoaderExample.class.getClassLoader());
+        // 类路径
+        System.out.println(System.getProperty("java.class.path"));
+
     }
 
     static void loadPrimitiveType() throws ClassNotFoundException {
