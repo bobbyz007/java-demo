@@ -1,6 +1,7 @@
 package com.example.clazz.classloader;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -8,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-// 自动以类加载器
+// 自定义类加载器
 public class MyClassLoader extends ClassLoader {
     public static final Path DEFAULT_CLASS_PATH = Paths.get("/home/justin/workspace/java/tmp");
     private final Path classDir;
@@ -20,7 +21,7 @@ public class MyClassLoader extends ClassLoader {
 
     public MyClassLoader(String classDir, ClassLoader parent) {
         super(parent);
-        this.classDir = Paths.get(classDir);
+        this.classDir = StringUtils.isBlank(classDir) ? DEFAULT_CLASS_PATH : Paths.get(classDir);
     }
 
     @Override
