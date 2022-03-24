@@ -6,7 +6,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * WaitNotifyOrNotifyAll使用notify方法可能导致死锁。 除了使用notifyAll方法（可能有性能开销）解决外，还可以使用两把锁区分开
+ * WaitNotifyOrNotifyAll使用notify方法可能导致死锁。 除了使用notifyAll方法（可能有性能开销）解决外，还可以使用两把锁区分开避免死锁
  *
  */
 public class WaitNotifyOrNotifyAll2 {
