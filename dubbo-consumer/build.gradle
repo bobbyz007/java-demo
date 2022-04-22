@@ -26,10 +26,10 @@ dependencies {
     implementation 'com.alibaba.boot:nacos-config-spring-boot-starter:0.2.8'
 
     // dubbo
-    implementation 'org.apache.dubbo:dubbo-spring-boot-starter:3.0.1'
-    implementation 'org.apache.dubbo:dubbo-registry-nacos:3.0.1'
-    implementation 'org.apache.dubbo:dubbo-configcenter-nacos:3.0.1'
-    implementation 'org.apache.dubbo:dubbo-metadata-report-nacos:3.0.1'
+    implementation 'org.apache.dubbo:dubbo-spring-boot-starter:3.0.7'
+    implementation 'org.apache.dubbo:dubbo-registry-nacos:3.0.7'
+    implementation 'org.apache.dubbo:dubbo-configcenter-nacos:3.0.7'
+    implementation 'org.apache.dubbo:dubbo-metadata-report-nacos:3.0.7'
 
     // dubbo集成sentinel
     implementation group: 'com.alibaba.csp', name: 'sentinel-apache-dubbo-adapter', version: '1.8.2'
