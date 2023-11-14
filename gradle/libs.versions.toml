@@ -1,0 +1,75 @@
+[versions]
+springBoot = "3.1.5"
+springDependencyManagement = "1.1.3"
+mybatisSpringBootStarter = "3.0.2"
+mysqlConnector = "8.2.0"
+redissonSpringBootStarter = "3.24.3"
+druidSpringBootStarter = "1.2.20"
+nacosConfigSpringBootStarter = "0.2.12"
+dubbo = "3.2.7"
+sentinel = "1.8.6"
+log4j = "2.21.1"
+jsoup = "1.16.2"
+poi = "5.2.4"
+guava = "32.1.3-jre"
+commons-io = "2.15.0"
+commons-lang3 = "3.13.0"
+netty = "4.1.101.Final"
+jolCli = "0.17"
+curator = "5.5.0"
+mapstruct = "1.5.5.Final"
+resilience4j = "2.1.0"
+jakartaServletApi = "6.0.0"
+javaxServletApi = "4.0.1"
+
+[libraries]
+spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web", version.ref = "springBoot" }
+spring-boot-starter-aop = { group = "org.springframework.boot", name = "spring-boot-starter-aop", version.ref = "springBoot" }
+spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator", version.ref = "springBoot" }
+spring-boot-starter-tomcat = { group = "org.springframework.boot", name = "spring-boot-starter-tomcat", version.ref = "springBoot" }
+spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test", version.ref = "springBoot" }
+
+mybatis-springboot-starter = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter", version.ref = "mybatisSpringBootStarter" }
+mysql-connector = { group = "com.mysql", name = "mysql-connector-j", version.ref = "mysqlConnector" }
+redisson-springboot-starter = { group = "org.redisson", name = "redisson-spring-boot-starter", version.ref = "redissonSpringBootStarter" }
+druid-springboot3-starter = { group = "com.alibaba", name = "druid-spring-boot-3-starter", version.ref = "druidSpringBootStarter" }
+nacos-springboot-starter = { group = "com.alibaba.boot", name = "nacos-config-spring-boot-starter", version.ref = "nacosConfigSpringBootStarter" }
+dubbo-springboot-starter = { group = "org.apache.dubbo", name = "dubbo-spring-boot-starter", version.ref = "dubbo" }
+dubbo-registry-nacos = { group = "org.apache.dubbo", name = "dubbo-registry-nacos", version.ref = "dubbo" }
+dubbo-configcenter-nacos = { group = "org.apache.dubbo", name = "dubbo-configcenter-nacos", version.ref = "dubbo" }
+dubbo-metadata-report-nacos = { group = "org.apache.dubbo", name = "dubbo-metadata-report-nacos", version.ref = "dubbo" }
+sentinel-apache-dubbo-adapter = { group = "com.alibaba.csp", name = "sentinel-apache-dubbo-adapter", version.ref = "sentinel" }
+sentinel-transport-simple-http = { group = "com.alibaba.csp", name = "sentinel-transport-simple-http", version.ref = "sentinel" }
+log4j = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
+jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
+poi = { group = "org.apache.poi", name = "poi", version.ref = "poi" }
+poi-ooxml = { group = "org.apache.poi", name = "poi-ooxml", version.ref = "poi" }
+guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
+commons-io = { group = "commons-io", name = "commons-io", version.ref = "commons-io" }
+commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version.ref = "commons-lang3" }
+netty = { group = "io.netty", name = "netty-codec-http", version.ref = "netty" }
+jol-cli = { group = "org.openjdk.jol", name = "jol-cli", version.ref = "jolCli" }
+curator-framework = { group = "org.apache.curator", name = "curator-framework", version.ref = "curator" }
+curator-recipes = { group = "org.apache.curator", name = "curator-recipes", version.ref = "curator" }
+mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { group = "org.mapstruct", name = "mapstruct-processor", version.ref = "mapstruct" }
+resilience4j-circuitbreaker = { group = "io.github.resilience4j", name = "resilience4j-circuitbreaker", version.ref = "resilience4j" }
+resilience4j-bulkhead = { group = "io.github.resilience4j", name = "resilience4j-bulkhead", version.ref = "resilience4j" }
+resilience4j-retry = { group = "io.github.resilience4j", name = "resilience4j-retry", version.ref = "resilience4j" }
+jakarta-servlet-api = {group = "jakarta.servlet", name = "jakarta.servlet-api", version.ref = "jakartaServletApi"}
+javax-servlet-api = {group = "javax.servlet", name = "javax.servlet-api", version.ref = "javaxServletApi"}
+
+[bundles]
+springBootLib = ["spring-boot-starter-web", "spring-boot-starter-aop", "spring-boot-starter-actuator"]
+dbBaseLib = ["mybatis-springboot-starter", "redisson-springboot-starter", "druid-springboot3-starter"]
+dubboRelatedLib = ["nacos-springboot-starter", "dubbo-springboot-starter", "dubbo-registry-nacos", "dubbo-configcenter-nacos",
+"dubbo-metadata-report-nacos", "sentinel-apache-dubbo-adapter", "sentinel-transport-simple-http"]
+utilLib = ["jsoup", "poi", "poi-ooxml", "guava", "commons-io", "commons-lang3"]
+curatorLib = ["curator-framework", "curator-recipes"]
+resilience4jLib = ["resilience4j-bulkhead", "resilience4j-circuitbreaker", "resilience4j-retry"]
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
+
+# Plugins defined by this project

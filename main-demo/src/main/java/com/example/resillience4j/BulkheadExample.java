@@ -1,7 +1,7 @@
 package com.example.resillience4j;
 
 import io.github.resilience4j.bulkhead.*;
-import io.vavr.CheckedFunction0;
+import io.github.resilience4j.core.functions.CheckedSupplier;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,7 +16,7 @@ public class BulkheadExample {
         Bulkhead bulkhead = bulkheadRegistry.bulkhead("name1");
         final AtomicInteger count = new AtomicInteger(0);
 
-        CheckedFunction0<String> decoratedSupplier = Bulkhead
+        CheckedSupplier<String> decoratedSupplier = Bulkhead
                 .decorateCheckedSupplier(bulkhead, () -> {
                     // 限定在concurrentCalls 的范围
                     System.out.println(count.addAndGet(1));
@@ -28,7 +28,7 @@ public class BulkheadExample {
             try {
                 new Thread(() -> {
                     try {
-                        decoratedSupplier.apply();
+                        decoratedSupplier.get();
                     } catch (Throwable e) {
                         e.printStackTrace();
                     }

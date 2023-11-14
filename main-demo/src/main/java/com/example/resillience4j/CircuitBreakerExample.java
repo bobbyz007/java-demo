@@ -3,14 +3,9 @@ package com.example.resillience4j;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
-import io.vavr.CheckedFunction0;
-import io.vavr.CheckedFunction1;
-import io.vavr.control.Try;
+import io.github.resilience4j.core.functions.CheckedFunction;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.Duration;
 import java.util.concurrent.TimeoutException;
 
@@ -47,7 +42,7 @@ public class CircuitBreakerExample {
                 e.printStackTrace();
             }
         }*/
-        CheckedFunction1<Integer, String> decoratedSupplier1 = CircuitBreaker.decorateCheckedFunction(breaker,
+        CheckedFunction<Integer, String> decoratedSupplier1 = CircuitBreaker.decorateCheckedFunction(breaker,
                 i -> {
                     if(i < 6) {
                         // mock slow calls

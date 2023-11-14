@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -52,5 +54,24 @@ public class MyClassLoader extends ClassLoader {
     @Override
     public String toString() {
         return "My ClassLoader";
+    }
+
+    public static void main(String[] args) throws ClassNotFoundException,
+            NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        MyClassLoader classLoader = new MyClassLoader();
+        // 加载class
+        Class<?> clazz = classLoader.loadClass("HelloWorld");
+
+        System.out.println("class loader: " + clazz.getClassLoader());
+
+        // clazz.newInstance() 已经deprecated，因为这个方法没有捕捉构造方法抛出的异常
+
+        //以下所有代码注释掉后，则HelloWorld类并不会初始化，因为loadClass只是在加载阶段，并没有主动初始化。
+        Object helloWorld = clazz.getDeclaredConstructor().newInstance();
+        System.out.println("hello world obj: " + helloWorld);
+
+        Method welcomeMethod = clazz.getMethod("welcome");
+        String result = (String) welcomeMethod.invoke(helloWorld);
+        System.out.println("result: " + result);
     }
 }
