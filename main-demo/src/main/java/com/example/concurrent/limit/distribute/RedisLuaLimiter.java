@@ -34,12 +34,9 @@ public class RedisLuaLimiter {
     }
 
     public static boolean acquire() throws IOException {
-        String luaScript = FileUtils.readFileToString(new File("D:\\workspace\\opensource\\java-demo\\main-demo\\src\\main\\java\\com\\example\\concurrent\\limit\\distribute\\limit.lua"), StandardCharsets.UTF_8);
+        String luaScript = FileUtils.readFileToString(new ClassPathResource("lua/limit.lua").getFile(), StandardCharsets.UTF_8);
 
-        // 注意：要把limit.lua拷贝到build/classes对应的包路径下，否则找不到文件
-        // 如：main-demo/build/classes/java/main/com/example/concurrent/limit/distribute/limit.lua
-        // 或者修改构建脚本，自动拷贝
-        /*ClassPathResource resource = new ClassPathResource("/com/example/concurrent/limit/distribute/limit.lua");
+        /*ClassPathResource resource = new ClassPathResource("lua/limit.lua");
         ResourceScriptSource source = new ResourceScriptSource(resource);
         String luaScript = source.getScriptAsString();*/
 

@@ -2,6 +2,7 @@ package com.example.clazz.classloader;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -13,9 +14,16 @@ import java.nio.file.Paths;
 
 // 自定义类加载器
 public class MyClassLoader extends ClassLoader {
-    public static final Path DEFAULT_CLASS_PATH = Paths.get("/home/justin/workspace/java/tmp");
+    public static final Path DEFAULT_CLASS_PATH;
     private final Path classDir;
 
+    static {
+        try {
+            DEFAULT_CLASS_PATH = new ClassPathResource("class").getFile().toPath();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public MyClassLoader() {
         super();
         this.classDir = DEFAULT_CLASS_PATH;
@@ -56,11 +64,40 @@ public class MyClassLoader extends ClassLoader {
         return "My ClassLoader";
     }
 
+    static void misc() {
+        System.out.println("current classloader: " + Thread.currentThread().getContextClassLoader());
+
+        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+        ClassLoader platformClassLoader = ClassLoader.getPlatformClassLoader();
+        System.out.println("system: " + systemClassLoader);
+        System.out.println("platform: " + platformClassLoader);
+
+        System.out.println("system: " + MyClassLoader.class.getClassLoader());
+    }
+
+    static void loadPrimitiveType() throws ClassNotFoundException {
+        // Class.forName() 方法可以获取原生类型的 Class，而 ClassLoader.loadClass() 则会报错。
+        Class<?> x = Class.forName("[I");
+        System.out.println(x);
+
+        // Class<?> x2 = ClassLoader.getSystemClassLoader().loadClass("[I");
+        Class<?> x3 = ClassLoader.getSystemClassLoader().loadClass("java.lang.String");
+        System.out.println(x3);
+    }
+
     public static void main(String[] args) throws ClassNotFoundException,
             NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         MyClassLoader classLoader = new MyClassLoader();
-        // 加载class
-        Class<?> clazz = classLoader.loadClass("HelloWorld");
+        /**
+         *package com.example;
+         *
+         * public class HelloWorld {
+         *     public String welcome() {
+         *         return "hello world";
+         *     }
+         * }
+         */
+        Class<?> clazz = classLoader.loadClass("com.example.HelloWorld");
 
         System.out.println("class loader: " + clazz.getClassLoader());
 
@@ -73,5 +110,9 @@ public class MyClassLoader extends ClassLoader {
         Method welcomeMethod = clazz.getMethod("welcome");
         String result = (String) welcomeMethod.invoke(helloWorld);
         System.out.println("result: " + result);
+
+        loadPrimitiveType();
+
+        misc();
     }
 }

@@ -2,12 +2,10 @@ package com.example.clazz;
 
 import org.openjdk.jol.info.ClassLayout;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * using jol-cli
  */
-public class JavaObjectLayoutExample {
+public class JavaObjectLayout {
     public static void main(String[] args) throws InterruptedException {
         // objectLayout();
 

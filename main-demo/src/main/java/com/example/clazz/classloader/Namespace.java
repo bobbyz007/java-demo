@@ -22,8 +22,8 @@ public class Namespace {
         BrokenDelegateClassLoader classLoader2 = new BrokenDelegateClassLoader(null);
         System.out.println("class loader 1's parent: " + classLoader1.getParent());
         System.out.println("class loader 2's parent: " + classLoader2.getParent());
-        aClass = classLoader1.loadClass("HelloWorld");
-        bClass = classLoader2.loadClass("HelloWorld");
+        aClass = classLoader1.loadClass("com.example.HelloWorld");
+        bClass = classLoader2.loadClass("com.example.HelloWorld");
         System.out.println(aClass.hashCode());
         System.out.println(bClass.hashCode());
         System.out.println(aClass == bClass);
@@ -32,11 +32,10 @@ public class Namespace {
         System.out.println("-----------------------------------------------------");
         BrokenDelegateClassLoader classLoader3 = new BrokenDelegateClassLoader(null);
         BrokenDelegateClassLoader classLoader4 = new BrokenDelegateClassLoader(null);
-        aClass = classLoader3.loadClass("HelloWorld");
-        bClass = classLoader4.loadClass("HelloWorld");
+        aClass = classLoader3.loadClass("com.example.HelloWorld");
+        bClass = classLoader4.loadClass("com.example.HelloWorld");
         System.out.println(aClass.hashCode());
         System.out.println(bClass.hashCode());
         System.out.println(aClass == bClass);
-
     }
 }
