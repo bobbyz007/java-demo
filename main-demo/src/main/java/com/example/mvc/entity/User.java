@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.example.mvc.entity;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.mvc;
 
 import com.alibaba.druid.support.jakarta.StatViewServlet;
 import com.alibaba.druid.support.jakarta.WebStatFilter;

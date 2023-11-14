@@ -1,7 +1,7 @@
-package com.example.controller;
+package com.example.mvc.controller;
 
-import com.example.entity.User;
-import com.example.service.UserService;
+import com.example.mvc.entity.User;
+import com.example.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

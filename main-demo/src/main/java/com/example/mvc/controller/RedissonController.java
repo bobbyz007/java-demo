@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.example.mvc.controller;
 
 import org.redisson.RedissonMultiLock;
 import org.redisson.api.RBucket;

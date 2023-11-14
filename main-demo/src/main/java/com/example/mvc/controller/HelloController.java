@@ -1,6 +1,6 @@
-package com.example.controller;
+package com.example.mvc.controller;
 
-import com.example.demo.consumingrest.Greeting;
+import com.example.mvc.entity.Greeting;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.example.mvc.controller;
 
 import com.example.concurrent.limit.app.spring.annotation.MySingleRateLimiter;
 import org.springframework.web.bind.annotation.GetMapping;

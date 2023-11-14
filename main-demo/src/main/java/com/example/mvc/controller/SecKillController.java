@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.example.mvc.controller;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;

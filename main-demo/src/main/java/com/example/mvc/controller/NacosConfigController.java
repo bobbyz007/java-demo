@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.example.mvc.controller;
 
 import com.alibaba.nacos.api.config.annotation.NacosValue;
 import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;

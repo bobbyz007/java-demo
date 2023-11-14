@@ -1,6 +1,6 @@
-package com.example.demo;
+package com.example.mvc;
 
-import com.example.demo.consumingrest.Quote;
+import com.example.mvc.entity.Quote;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

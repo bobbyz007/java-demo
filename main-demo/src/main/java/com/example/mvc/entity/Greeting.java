@@ -1,4 +1,4 @@
-package com.example.demo.consumingrest;
+package com.example.mvc.entity;
 
 public class Greeting {
 

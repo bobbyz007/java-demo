@@ -1,6 +1,6 @@
-package com.example.service;
+package com.example.mvc.service;
 
-import com.example.entity.User;
+import com.example.mvc.entity.User;
 
 import java.util.List;
 
