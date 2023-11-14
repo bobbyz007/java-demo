@@ -21,6 +21,8 @@ mapstruct = "1.5.5.Final"
 resilience4j = "2.1.0"
 jakartaServletApi = "6.0.0"
 javaxServletApi = "4.0.1"
+selenium = "4.15.0"
+hutool = "5.8.22"
 
 [libraries]
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web", version.ref = "springBoot" }
@@ -58,13 +60,15 @@ resilience4j-bulkhead = { group = "io.github.resilience4j", name = "resilience4j
 resilience4j-retry = { group = "io.github.resilience4j", name = "resilience4j-retry", version.ref = "resilience4j" }
 jakarta-servlet-api = {group = "jakarta.servlet", name = "jakarta.servlet-api", version.ref = "jakartaServletApi"}
 javax-servlet-api = {group = "javax.servlet", name = "javax.servlet-api", version.ref = "javaxServletApi"}
+selenium = {group = "org.seleniumhq.selenium", name = "selenium-java", version.ref = "selenium"}
+hutool = {group = "cn.hutool", name = "hutool-all", version.ref = "hutool"}
 
 [bundles]
 springBootLib = ["spring-boot-starter-web", "spring-boot-starter-aop", "spring-boot-starter-actuator"]
 dbBaseLib = ["mybatis-springboot-starter", "redisson-springboot-starter", "druid-springboot3-starter"]
 dubboRelatedLib = ["nacos-springboot-starter", "dubbo-springboot-starter", "dubbo-registry-nacos", "dubbo-configcenter-nacos",
 "dubbo-metadata-report-nacos", "sentinel-apache-dubbo-adapter", "sentinel-transport-simple-http"]
-utilLib = ["jsoup", "poi", "poi-ooxml", "guava", "commons-io", "commons-lang3"]
+utilLib = ["jsoup", "poi", "poi-ooxml", "guava", "commons-io", "commons-lang3", "hutool"]
 curatorLib = ["curator-framework", "curator-recipes"]
 resilience4jLib = ["resilience4j-bulkhead", "resilience4j-circuitbreaker", "resilience4j-retry"]
 

@@ -2,6 +2,8 @@ plugins {
     id("java")
     alias(libs.plugins.spring.boot) apply false
     alias(libs.plugins.spring.dependency.management) apply false
+    id("version-catalog")
+    id("maven-publish")
 }
 
 java {
@@ -31,5 +33,36 @@ subprojects {
 
     tasks.withType<Test> {
         useJUnitPlatform()
+    }
+}
+
+/**
+ * 发布toml文件：基于catalog和publishing插件
+ *
+ * 使用已发布的toml文件:
+ * dependencyResolutionManagement {
+ *     versionCatalogs {
+ *         libs {
+ *             from("com.example.catalog:catalog:1.0.1")
+ *             // 我们也可以重写覆盖catalog中的版本
+ *             version("groovy", "3.0.6")
+ *         }
+ *     }
+ * }
+ */
+catalog {
+    // declare the aliases, bundles and versions in this block
+    versionCatalog {
+        from(files("./gradle/libs.versions.toml"))
+    }
+}
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "com.example.catalog"
+            artifactId = "catalog"
+            version = "1.0.1"
+            from(components["versionCatalog"])
+        }
     }
 }

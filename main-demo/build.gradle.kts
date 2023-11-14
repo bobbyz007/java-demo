@@ -32,7 +32,7 @@ dependencies {
     annotationProcessor(libs.mapstruct.processor)
 
     implementation(libs.bundles.resilience4jLib)
-    compileOnly(libs.javax.servlet.api)
+    implementation(libs.selenium)
 }
 
 tasks.bootRun{
