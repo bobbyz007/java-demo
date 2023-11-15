@@ -14,7 +14,13 @@ dependencyResolutionManagement {
 
 rootProject.name = "java-demo"
 include("main-demo")
-include("gradle-demo")
+
+include("gradle-tutorials:gradle-demo")
+include("gradle-tutorials:shared")
+include("gradle-tutorials:pub-api")
+include("gradle-tutorials:services:person-service")
+include("gradle-tutorials:services:webservice")
+
 include("dubbo-provider")
 include("dubbo-consumer")
 include("dubbo-interface")

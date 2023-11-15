@@ -54,6 +54,40 @@ tasks.register("greet") {
     }
 }
 
+
+/**
+ * 监听配置阶段的project evaluation，在子项目pub-api和shared中设置hasTests为true
+ */
+gradle.beforeProject() {
+    project.ext.set("hasTests", false)
+}
+gradle.afterProject() {
+    if (project.ext.has("hasTests") && project.ext.get("hasTests") as Boolean) {
+        val projectString = project.toString()
+        println("Adding test task to $projectString")
+        tasks.register("testDemo") {
+            doLast {
+                println("Running tests for $projectString")
+            }
+        }
+    }
+}
+gradle.addProjectEvaluationListener(object: ProjectEvaluationListener{
+    override fun beforeEvaluate(project: Project) {
+        val projectString = project.name
+        if (projectString == "pub-api") {
+            println("before evaluating project: $projectString")
+        }
+    }
+    override fun afterEvaluate(project: Project, state: ProjectState) {
+        val projectString = project.name
+        if (projectString == "pub-api") {
+            println("after evaluating project: $projectString")
+        }
+    }
+})
+
+// 内置的application插件
 application {
     mainClass = "com.example.Bootstrap"
 }
