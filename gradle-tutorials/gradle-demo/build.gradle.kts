@@ -54,7 +54,6 @@ tasks.register("greet") {
     }
 }
 
-
 /**
  * 监听配置阶段的project evaluation，在子项目pub-api和shared中设置hasTests为true
  */
@@ -92,6 +91,7 @@ application {
     mainClass = "com.example.Bootstrap"
 }
 
+// 使用maven-publish插件
 publishing {
     publications {
         create<MavenPublication>("maven") {
