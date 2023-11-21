@@ -57,5 +57,91 @@ tasks.register("printProperties") {
     }
 }
 
+/**
+ * lazy properties: Provider(read only) and Property(configurable)
+ */
+abstract class Greeting : DefaultTask() {
+    @get:Input
+    abstract val greeting: Property<String>
+
+    @Internal
+    val message: Provider<String> = greeting.map { "$it from Gradle" }
+
+    @TaskAction
+    fun printMessage() {
+        logger.quiet(message.get())
+    }
+}
+tasks.register<Greeting>("greeting") {
+    greeting = "Hi"
+}
+
+/**
+ * create properties or provider: project.objects.property(...) or property/provider.map(...)
+ * connecting properties together: task <-> extension
+ */
+// a project extension
+interface MessageExtension {
+    val greeting: Property<String>
+}
+// Create the project extension
+val messages = project.extensions.create<MessageExtension>("messages")
+// Create the greeting task
+tasks.register<Greeting>("greeting2") {
+    // Attach the greeting from the project extension
+    // Note that the values of the project extension have not been configured yet
+    greeting = messages.greeting
+}
+messages.apply {
+    // Configure the greeting on the extension
+    // Note that there is no need to reconfigure the task's `greeting` property. This is automatically updated as the extension property changes
+    greeting = "Hi2"
+}
+
+/**
+ * working with task inputs and outputs
+ * gradle gradle-tutorials:shared:consumer
+ */
+abstract class Producer : DefaultTask() {
+    @get:OutputFile
+    abstract val outputFile: RegularFileProperty
+
+    @TaskAction
+    fun produce() {
+        val message = "Hello, World!"
+        val output = outputFile.get().asFile
+        output.writeText( message)
+        logger.quiet("Wrote '${message}' to ${output}")
+    }
+}
+abstract class Consumer : DefaultTask() {
+    @get:InputFile
+    abstract val inputFile: RegularFileProperty
+
+    @TaskAction
+    fun consume() {
+        val input = inputFile.get().asFile
+        val message = input.readText()
+        logger.quiet("Read '${message}' from ${input}")
+    }
+}
+
+// producer and consumer are of type 'TaskProvider'
+val producer = tasks.register<Producer>("producer")
+val consumer = tasks.register<Consumer>("consumer")
+consumer {
+    // Connect the producer task output to the consumer task input
+    // Don't need to add a task dependency to the consumer task. This is automatically added
+    inputFile = producer.flatMap { it.outputFile }
+}
+producer {
+    // Set values for the producer lazily
+    // Don't need to update the consumer.inputFile property. This is automatically updated as producer.outputFile changes
+    outputFile = layout.buildDirectory.file("file.txt")
+}
+
+// Change the build directory.
+// Don't need to update producer.outputFile and consumer.inputFile. These are automatically updated as the build directory changes
+layout.buildDirectory = layout.buildDirectory.dir("output")
 
 
