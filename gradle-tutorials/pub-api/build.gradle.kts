@@ -1,4 +1,4 @@
-import java.nio.file.Files
+import java.time.Duration
 
 plugins {
     id("java")
@@ -122,3 +122,181 @@ tasks.register("listFiles2") {
         }
     }
 }
+
+// skipping task
+// gradle gradle-tutorials:pub-api:hello -PskipHello
+val hello by tasks.registering {
+    doLast {
+        println("hello world")
+    }
+}
+hello {
+    val skipProvider = providers.gradleProperty("skipHello")
+    onlyIf("there is no property skipHello") {
+        !skipProvider.isPresent
+    }
+}
+
+// task enable/disable/timeout
+tasks.register("hangingTask") {
+    doLast() {
+        Thread.sleep(1000)
+    }
+    timeout = Duration.ofMillis(500)
+
+    // enable or disable task
+    enabled = true
+}
+
+// task rule
+// gradle gradle-tutorials:pub-api:pingJustin
+tasks.addRule("Pattern: ping<ID>") {
+    val taskName = this
+    // or this.startsWith(...)
+    if (startsWith("ping")) {
+        task(taskName) {
+            doLast {
+                println("Pinging: " + (taskName.replace("ping", "")))
+            }
+        }
+    }
+}
+tasks.register("groupPing") {
+    dependsOn("pingServer1", "pingServer2")
+}
+
+// finalizer task
+val taskX by tasks.registering {
+    doLast() {
+        println("taskX")
+        throw RuntimeException()
+    }
+}
+val taskY by tasks.registering {
+    doLast() {
+        println("taskY")
+    }
+}
+taskX {
+    finalizedBy(taskY)
+}
+
+// writing task types
+abstract class GreetingTask : DefaultTask() {
+    @get:Input // 在get函数上添加注解Input，表示这个字段作为task的输入
+    abstract val greeting: Property<String>
+    init {
+        greeting.convention("hello from GreetingTask")
+    }
+    @TaskAction
+    fun greet() {
+        println(greeting.get())
+    }
+}
+tasks.register<GreetingTask>("greet") // use convention greeting
+tasks.register<GreetingTask>("greetCustomize") {// customize the greeting
+    greeting = "greetings from GreetingTask"
+}
+
+// incremental task
+// 第二遍执行，如果任务输入没有变化，则任务执行状态是UP-TO-DATE，可以增删改文件查看效果
+// 另外对于非文件类型的属性变化， gradle无法判断这种属性变化对输出的影响，则这种属性值变化都会执行全量构建。
+// gradle gradle-tutorials:pub-api:incrementalReverse -PtaskInputProperty=changed
+abstract class IncrementalReverseTask : DefaultTask() {
+    @get:Incremental
+    @get:PathSensitive(PathSensitivity.NAME_ONLY)
+    @get:InputDirectory
+    abstract val inputDir: DirectoryProperty
+
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @get:Input
+    abstract val inputProperty: Property<String>
+
+    @TaskAction
+    fun execute(inputChanges: InputChanges) {
+        println(
+            if (inputChanges.isIncremental) "Executing incrementally"
+            else "Executing non-incrementally"
+        )
+
+        inputChanges.getFileChanges(inputDir).forEach { change ->
+            if (change.fileType == FileType.DIRECTORY) return@forEach
+
+            println("${change.changeType}: ${change.normalizedPath}")
+            val targetFile = outputDir.file(change.normalizedPath).get().asFile
+            if (change.changeType == ChangeType.REMOVED) {
+                targetFile.delete()
+            } else {
+                targetFile.writeText(change.file.readText().reversed())
+            }
+        }
+    }
+}
+tasks.register<IncrementalReverseTask>("incrementalReverse") {
+    inputDir = file("src/main/resources/incremental-inputs")
+    outputDir = layout.buildDirectory.dir("incremental-outputs")
+    inputProperty = project.findProperty("taskInputProperty") as String? ?: "original"
+}
+
+/**
+ * Declaring and Using Command Line Options for task
+ * 基于option注解， 在命令行参数自动识别option选项
+ * gradle gradle-tutorials:pub-api:verifyUrl --url=www.baidu.com
+ */
+abstract class UrlVerify : DefaultTask() {
+    @set:Option(option = "url", description = "Configures the URL to be verified")
+    @get:Input
+    abstract var url: String
+
+    @TaskAction
+    fun verify() {
+        println("Verifying URL: $url")
+    }
+}
+tasks.register<UrlVerify>("verifyUrl")
+
+/**
+ * Worker api:  perform independent units of work concurrently
+ */
+// The parameters for a single unit of work
+interface ReverseParameters : WorkParameters {
+    val fileToReverse : RegularFileProperty
+    val destinationDir : DirectoryProperty
+}
+// The implementation of a single unit of work
+abstract class ReverseFile @Inject constructor(val fileSystemOperations: FileSystemOperations) : WorkAction<ReverseParameters> {
+    override fun execute() {
+        fileSystemOperations.copy {
+            from(parameters.fileToReverse)
+            into(parameters.destinationDir)
+            filter { line: String -> line.reversed() }
+        }
+    }
+}
+// The WorkerExecutor will be injected by Gradle at runtime
+abstract class ReverseFiles @Inject constructor(private val workerExecutor: WorkerExecutor) : SourceTask() {
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @TaskAction
+    fun reverseFiles() {
+        // Create a WorkQueue to submit work items
+        val workQueue = workerExecutor.noIsolation()
+
+        // Create and submit a unit of work for each file
+        source.forEach { file ->
+            workQueue.submit(ReverseFile::class) {
+                fileToReverse = file
+                destinationDir = outputDir
+            }
+        }
+    }
+}
+// gradle gradle-tutorials:pub-api:reverseFiles
+tasks.register<ReverseFiles>("reverseFiles") {
+    source("src/main/resources/concurrent-input")
+    outputDir = layout.buildDirectory.dir("concurrent-output")
+}
+
