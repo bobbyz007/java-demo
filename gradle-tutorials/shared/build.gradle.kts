@@ -142,6 +142,6 @@ producer {
 
 // Change the build directory.
 // Don't need to update producer.outputFile and consumer.inputFile. These are automatically updated as the build directory changes
-layout.buildDirectory = layout.buildDirectory.dir("output")
+layout.buildDirectory = layout.projectDirectory.dir("output")
 
 
