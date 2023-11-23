@@ -1,3 +1,4 @@
+import com.example.gradle.DataProcessing
 import com.example.gradle.ServerEnvironment
 
 buildscript {
@@ -16,7 +17,11 @@ apply(plugin = "com.example.gradle.main-plugin")
 dependencies {
     implementation(project(":gradle-tutorials:pub-api"))
     implementation(project(":gradle-tutorials:shared"))
+    // 替换com.example.gradle.main-plugin插件中提供的默认依赖
+    // configurations.getByName("dataFiles")("com.taobao.arthas:arthas-common:3.7.1")
+    "dataFiles"("com.taobao.arthas:arthas-common:3.6.9")
 }
+
 
 /**
  * write a simple plugin
@@ -97,3 +102,5 @@ configure<NamedDomainObjectContainer<ServerEnvironment>>() {
         url = "http://prod.enterprise.com"
     }
 }
+
+tasks.register<DataProcessing>("dataProcessing")
