@@ -1,3 +1,18 @@
+import com.example.gradle.ServerEnvironment
+
+buildscript {
+    repositories {
+        // 本地仓库，对应maven-publish插件的 publishToMavenLocal任务
+        mavenLocal()
+        gradlePluginPortal()
+    }
+    dependencies {
+        // com.example.gradle.main-plugin插件对应的依赖
+        classpath("com.example.gradle.main-plugin:com.example.gradle.main-plugin.gradle.plugin:1.0.0")
+    }
+}
+apply(plugin = "com.example.gradle.main-plugin")
+
 dependencies {
     implementation(project(":gradle-tutorials:pub-api"))
     implementation(project(":gradle-tutorials:shared"))
@@ -66,4 +81,19 @@ apply<GreetingPlugin3>()
 configure<GreetingPluginExtension3> {
     message = "Hi"
     greeter = "Gradle"
+}
+
+// 插件com.example.gradle.main-plugin的配置
+configure<NamedDomainObjectContainer<ServerEnvironment>>() {
+    create("dev") {
+        url = "http://localhost:8080"
+    }
+
+    create("staging") {
+        url = "http://staging.enterprise.com"
+    }
+
+    create("production") {
+        url = "http://prod.enterprise.com"
+    }
 }
