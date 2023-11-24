@@ -5,9 +5,11 @@ plugins {
     id("maven-publish")
 }
 
+// 推荐使用java扩展的toolchain，而不是sourceCompatibility和targetCompatibility
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 allprojects {
