@@ -23,6 +23,7 @@ javaxServletApi = "4.0.1"
 selenium = "4.15.0"
 hutool = "5.8.22"
 codec = "1.16.0"
+arthas = "3.7.1"
 
 [libraries]
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web", version.ref = "springBoot" }
@@ -63,6 +64,7 @@ javax-servlet-api = {group = "javax.servlet", name = "javax.servlet-api", versio
 selenium = {group = "org.seleniumhq.selenium", name = "selenium-java", version.ref = "selenium"}
 hutool = {group = "cn.hutool", name = "hutool-all", version.ref = "hutool"}
 codec = {group = "commons-codec", name = "commons-codec", version.ref = "codec"}
+arthas = {group = "com.taobao.arthas", name = "arthas-common", version.ref = "arthas"}
 
 [bundles]
 springBootLib = ["spring-boot-starter-web", "spring-boot-starter-aop", "spring-boot-starter-actuator"]

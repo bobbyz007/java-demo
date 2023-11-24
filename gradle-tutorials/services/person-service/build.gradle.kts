@@ -1,5 +1,5 @@
-import com.example.gradle.DataProcessing
-import com.example.gradle.ServerEnvironment
+import com.example.gradle.dependency.DataProcessing
+import com.example.gradle.collection.ServerEnvironment
 import com.example.gradle.collection.DownloadExtension
 import com.example.gradle.managed.DownloadTask
 
@@ -21,10 +21,9 @@ dependencies {
     implementation(project(":gradle-tutorials:pub-api"))
     implementation(project(":gradle-tutorials:shared"))
     // 替换com.example.gradle.main-plugin插件中提供的默认依赖
-    // configurations.getByName("dataFiles")("com.taobao.arthas:arthas-common:3.7.1")
-    "dataFiles"("com.taobao.arthas:arthas-common:3.6.9")
+    // configurations.getByName("dataFiles")(libs.arthas)
+    "dataFiles"(libs.arthas)
 }
-
 
 /**
  * write a simple plugin
@@ -109,6 +108,8 @@ configure<NamedDomainObjectContainer<ServerEnvironment>>() {
 // 插件com.example.gradle.main-plugin的配置
 // extension包裹NamedDomainObjectContainer对象
 configure<DownloadExtension>() {
+    // For each container property, Gradle automatically adds a block to the Groovy and Kotlin DSL
+    // that you can use to configure the contents of the container:
     resources {
         register("gradle") {
             userName = "Justin"
