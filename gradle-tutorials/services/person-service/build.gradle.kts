@@ -1,5 +1,7 @@
 import com.example.gradle.DataProcessing
 import com.example.gradle.ServerEnvironment
+import com.example.gradle.collection.DownloadExtension
+import com.example.gradle.managed.DownloadTask
 
 buildscript {
     repositories {
@@ -13,6 +15,7 @@ buildscript {
     }
 }
 apply(plugin = "com.example.gradle.main-plugin")
+apply(plugin = "com.example.gradle.sub-plugin")
 
 dependencies {
     implementation(project(":gradle-tutorials:pub-api"))
@@ -103,4 +106,28 @@ configure<NamedDomainObjectContainer<ServerEnvironment>>() {
     }
 }
 
+// 插件com.example.gradle.main-plugin的配置
+// extension包裹NamedDomainObjectContainer对象
+configure<DownloadExtension>() {
+    resources {
+        register("gradle") {
+            userName = "Justin"
+            uri = uri("https://gradle.org")
+        }
+        register("baidu") {
+            userName = "Zou"
+            uri = uri("https://www.baidu.com")
+        }
+    }
+}
+
+// 定制插件任务的依赖
 tasks.register<DataProcessing>("dataProcessing")
+
+// nested managed properties
+tasks.register<DownloadTask>("downloadNested") {
+    resource.path = "dl"
+    resource.hostName = "www.baidu.com"
+}
+
+
