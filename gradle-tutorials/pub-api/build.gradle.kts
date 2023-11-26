@@ -1,7 +1,7 @@
 import java.time.Duration
 
 plugins {
-    id("java")
+    id("myproject.java-conventions")
 }
 
 dependencies {

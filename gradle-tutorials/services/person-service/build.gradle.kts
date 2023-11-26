@@ -14,6 +14,9 @@ buildscript {
         classpath("com.example.gradle.main-plugin:com.example.gradle.main-plugin.gradle.plugin:1.0.0")
     }
 }
+plugins{
+    id("myproject.java-conventions")
+}
 apply(plugin = "com.example.gradle.main-plugin")
 apply(plugin = "com.example.gradle.sub-plugin")
 

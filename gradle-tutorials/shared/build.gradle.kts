@@ -11,7 +11,10 @@ buildscript {
 }
 
 plugins {
-    id("java")
+    id("myproject.java-conventions")
+}
+
+dependencies {
 }
 
 /**

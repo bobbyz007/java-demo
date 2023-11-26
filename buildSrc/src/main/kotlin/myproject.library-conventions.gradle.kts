@@ -1,40 +1,11 @@
+// Define Java Library conventions for this organization.
+// Projects need to use the organization's Java conventions and publish using Maven Publish
+
 plugins {
-    id("java")
-    alias(libs.plugins.spring.boot) apply false
+    `java-library`
+    `maven-publish`
     id("version-catalog")
-    id("maven-publish")
-}
-
-// 推荐使用java扩展的toolchain，而不是sourceCompatibility和targetCompatibility
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
-
-allprojects {
-    group = "org.example"
-    version = "1.0-SNAPSHOT"
-
-    // 配置字符编码
-    tasks.withType<JavaCompile>() {
-        options.encoding = "UTF-8"
-    }
-
-    repositories {
-        maven("https://maven.aliyun.com/repository/public/")
-        maven("https://mirrors.huaweicloud.com/repository/maven/")
-        // 或者公司本地仓库
-        mavenCentral()
-    }
-}
-
-subprojects {
-    apply(plugin= "java")
-
-    tasks.withType<Test> {
-        useJUnitPlatform()
-    }
+    id("myproject.java-conventions")
 }
 
 /**
@@ -67,3 +38,12 @@ publishing {
         }
     }
 }
+
+
+// The project requires libraries to have a README containing sections configured below
+val readmeCheck by tasks.registering(com.example.ReadmeVerificationTask::class) {
+    readme = layout.projectDirectory.file("README.md")
+    readmePatterns = listOf("^## API$", "^## Changelog$")
+}
+
+tasks.named("check") { dependsOn(readmeCheck) }
