@@ -19,6 +19,7 @@ plugins{
 }
 apply(plugin = "com.example.gradle.main-plugin")
 apply(plugin = "com.example.gradle.sub-plugin")
+apply(plugin = "com.example.gradle.codeline-plugin")
 
 dependencies {
     implementation(project(":gradle-tutorials:pub-api"))

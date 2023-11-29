@@ -147,4 +147,19 @@ producer {
 // Don't need to update producer.outputFile and consumer.inputFile. These are automatically updated as the build directory changes
 layout.buildDirectory = layout.projectDirectory.dir("output")
 
+tasks.register("printComponents") {
+    doLast() {
+        components.forEach() {
+            println(it.name + ": " + it.toString())
+        }
+    }
+}
+tasks.register("printConfigurations") {
+    doLast() {
+        configurations.forEach() {
+            println(it.name + ": " + it.description)
+        }
+    }
+}
+
 

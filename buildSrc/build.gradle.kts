@@ -1,4 +1,5 @@
 plugins {
+    // 会间接引人java-gradle-plugin,org.jetbrains.kotlin.jvm等插件
     `kotlin-dsl`
 }
 
