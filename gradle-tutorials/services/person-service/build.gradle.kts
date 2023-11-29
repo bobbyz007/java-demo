@@ -1,3 +1,4 @@
+import com.example.gradle.CodeLinesCounterPlugin
 import com.example.gradle.dependency.DataProcessing
 import com.example.gradle.collection.ServerEnvironment
 import com.example.gradle.collection.DownloadExtension
@@ -135,4 +136,16 @@ tasks.register<DownloadTask>("downloadNested") {
     resource.hostName = "www.baidu.com"
 }
 
+configure<CodeLinesCounterPlugin.CodeLinesExtension> {
+    sourceFilters.skipBlankLines = true
 
+    // 在插件提供的 extension 中定义了sourceFilters方法，否则会报错
+    sourceFilters({
+        skipBlankLines = true
+    })
+    sourceFilters{
+        skipBlankLines = true
+    }
+
+    fileExtensions = mutableListOf("java", "conf")
+}
