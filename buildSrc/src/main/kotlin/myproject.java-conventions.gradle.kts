@@ -25,7 +25,7 @@ version = "1.0-SNAPSHOT"
 // 推荐使用java扩展的toolchain，而不是sourceCompatibility和targetCompatibility
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
