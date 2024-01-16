@@ -8,8 +8,9 @@ dependencies {
     // spring boot:web, aop, 管理服务，比如应用健康检查等等 http://localhost:8081/actuator/health
     implementation(libs.bundles.springBootLib)
 
-    // db libs
+    // db libs and redis
     implementation(libs.bundles.dbBaseLib)
+    implementation(libs.redisson.springboot.starter)
 
     // mysql driver
     runtimeOnly(libs.mysql.connector)

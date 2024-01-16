@@ -4,9 +4,9 @@ server:
 spring:
   dataSource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://139.9.40.183:3306/testdb?characterEncoding=utf-8&useSSL=false
-    username: cloudmysql
-    password: xxxxxx
+    url: jdbc:mysql://127.0.0.1:3306/testdb?characterEncoding=utf-8&useSSL=false
+    username: mysql
+    password: mysql
     type: com.alibaba.druid.pool.DruidDataSource
 
     druid:
@@ -44,20 +44,7 @@ spring:
       # 是否保持长连接，默认为false。即当连接的空闲时间大于 keepAliveBetweenTimeMillis（默认1分钟），但是小于 minEvictableIdleTimeMillis（默认30分钟），
       # Druid会通过调用validationQuery保持该连接的有效性。当连接空闲时间大于 minEvictableIdleTimeMillis，Druid会直接将该连接关闭，keepAlive会无效。
       keepAlive: false
-      filters: stat,log4j
-  redis:
-    # 网络环境不好，超时适当调大点
-    timeout: 10000
-    connectTimeout: 20000
-    password: xxxxxx
-    cluster:
-      nodes:
-        - 139.9.40.183:6390
-        - 139.9.40.183:6391
-        - 139.9.40.183:6392
-        - 139.9.40.183:6393
-        - 139.9.40.183:6394
-        - 139.9.40.183:6395
+      filters: stat,log4j2
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   # resultType配置时所在的包位置
@@ -65,31 +52,13 @@ mybatis:
   configuration:
     # like column:user_name, property:userName
     map-underscore-to-camel-case: true
-nacos:
-  config:
-    # 主配置; 主要是加载 静态配置 文件的; SpringBoot在启动的时候会先去Nacos中读取配置文件然后加载到Environment中; 静态配置不启用自动刷新;
-    bootstrap:
-      #log-enable: true #支持日志级别的加载时机，控制台会打印很多日志
-      enable: true #开启配置预加载功能
-    server-addr: 139.9.40.183:8848
-    username: nacos
-    password: xxxxxx
-    # 主配置 data-ids  (可以配置多个,如果多个配置文件中有相同的 属性 则优先取最前面的值)
-    data-ids: test-data,test-data2
-    group-id: DEFAULT_GROUP
-    namespace: public # 命名空间
-    type: properties #yaml or whatever
-    max-retry: 10
-    config-retry-time: 2333
-    config-long-poll-timeout: 30000 # 配置监听长轮询超时时间
-    auto-refresh: true #是否开启自动刷新 (false:不监听属性变化,true:监听属性变化,但是对应的属性注解上也必须设置autoRefreshed = true才可以实时更新)
-    remote-first: true # nacos配置优先于本地配置
 dubbo:
   application:
     name: dubbo-provider
+    qos-port: 22222
   registry:
     protocol: dubbo
-    address: nacos://139.9.40.183:8848
+    address: nacos://127.0.0.1:8848
     use-as-config-center: true
     use-as-metadata-center: true
   protocol:

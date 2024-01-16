@@ -1,29 +1,29 @@
 [versions]
-springBoot = "3.1.5"
-mybatisSpringBootStarter = "3.0.2"
+springBoot = "3.2.1"
+mybatisSpringBootStarter = "3.0.3"
 mysqlConnector = "8.2.0"
-redissonSpringBootStarter = "3.24.3"
-druidSpringBootStarter = "1.2.20"
+redissonSpringBootStarter = "3.25.2"
+druidSpringBootStarter = "1.2.21"
 nacosConfigSpringBootStarter = "0.2.12"
-dubbo = "3.2.7"
-sentinel = "1.8.6"
-log4j = "2.21.1"
-jsoup = "1.16.2"
-poi = "5.2.4"
-guava = "32.1.3-jre"
-commons-io = "2.15.0"
-commons-lang3 = "3.13.0"
-netty = "4.1.101.Final"
+dubbo = "3.3.0-beta.1"
+sentinel = "1.8.7"
+log4j = "2.22.1"
+jsoup = "1.17.2"
+poi = "5.2.5"
+guava = "33.0.0-jre"
+commons-io = "2.15.1"
+commons-lang3 = "3.14.0"
+netty = "4.1.104.Final"
 jolCli = "0.17"
-curator = "5.5.0"
+curator = "5.6.0"
 mapstruct = "1.5.5.Final"
-resilience4j = "2.1.0"
+resilience4j = "2.2.0"
 jakartaServletApi = "6.0.0"
 javaxServletApi = "4.0.1"
-selenium = "4.15.0"
-hutool = "5.8.22"
+selenium = "4.16.1"
+hutool = "5.8.25"
 codec = "1.16.0"
-arthas = "3.7.1"
+arthas = "3.7.2"
 
 [libraries]
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web", version.ref = "springBoot" }
@@ -68,7 +68,7 @@ arthas = {group = "com.taobao.arthas", name = "arthas-common", version.ref = "ar
 
 [bundles]
 springBootLib = ["spring-boot-starter-web", "spring-boot-starter-aop", "spring-boot-starter-actuator"]
-dbBaseLib = ["mybatis-springboot-starter", "redisson-springboot-starter", "druid-springboot3-starter"]
+dbBaseLib = ["mybatis-springboot-starter", "druid-springboot3-starter"]
 dubboRelatedLib = ["nacos-springboot-starter", "dubbo-springboot-starter", "dubbo-registry-nacos", "dubbo-configcenter-nacos",
 "dubbo-metadata-report-nacos", "sentinel-apache-dubbo-adapter", "sentinel-transport-simple-http"]
 utilLib = ["jsoup", "poi", "poi-ooxml", "guava", "commons-io", "commons-lang3", "hutool"]

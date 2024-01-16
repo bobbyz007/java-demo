@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":dubbo-interface"))
+    implementation(project(":dubbo-samples:dubbo-interface"))
 
     // spring boot:web, aop, 管理服务，比如应用健康检查等等 http://localhost:8081/actuator/health
     implementation(libs.bundles.springBootLib)

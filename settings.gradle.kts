@@ -37,8 +37,8 @@ include("gradle-tutorials:pub-api")
 include("gradle-tutorials:services:person-service")
 include("gradle-tutorials:services:webservice")
 
-include("dubbo-provider")
-include("dubbo-consumer")
-include("dubbo-interface")
+include("dubbo-samples:dubbo-provider")
+include("dubbo-samples:dubbo-consumer")
+include("dubbo-samples:dubbo-interface")
 
 
