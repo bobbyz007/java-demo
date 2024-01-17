@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8083
 
 spring:
   dataSource:
@@ -54,17 +54,16 @@ mybatis:
     map-underscore-to-camel-case: true
 dubbo:
   application:
-    name: dubbo-consumer
-    qos-port: 22222
+    name: dubbo-provider
+    qos-port: 22224
   registry:
     protocol: dubbo
     address: nacos://127.0.0.1:8848
-    register: false # 消费者不用注册到注册中心
     use-as-config-center: true
     use-as-metadata-center: true
   protocol:
     name: dubbo
-    port: 20880 # -1: 端口自增
+    port: 20882
     threads: 200
     queues: 100
     threadpool: cached

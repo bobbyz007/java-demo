@@ -38,6 +38,7 @@ include("gradle-tutorials:services:person-service")
 include("gradle-tutorials:services:webservice")
 
 include("dubbo-samples:dubbo-provider")
+include("dubbo-samples:dubbo-provider-embed")
 include("dubbo-samples:dubbo-consumer")
 include("dubbo-samples:dubbo-interface")
 

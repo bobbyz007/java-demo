@@ -53,9 +53,13 @@ mybatis:
     # like column:user_name, property:userName
     map-underscore-to-camel-case: true
 dubbo:
+  service:
+    com.example.client.GreetingService:
+      helloAsync:
+        timeout:10000
   application:
     name: dubbo-provider
-    qos-port: 22222
+    qos-port: 22223
   registry:
     protocol: dubbo
     address: nacos://127.0.0.1:8848
@@ -63,7 +67,7 @@ dubbo:
     use-as-metadata-center: true
   protocol:
     name: dubbo
-    port: 20880
+    port: 20881
     threads: 200
     queues: 100
     threadpool: cached
