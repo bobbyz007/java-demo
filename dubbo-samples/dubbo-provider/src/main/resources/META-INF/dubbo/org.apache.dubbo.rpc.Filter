@@ -1,0 +1,3 @@
+async-postprocess=com.example.provider.filter.AsyncPostprocessFilter
+legacy-block=com.example.provider.filter.LegacyBlockFilter
+legacy-listenable=com.example.provider.filter.LegacyListenableFilter

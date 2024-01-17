@@ -7,10 +7,15 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.dubbo.config.annotation.Method;
 import org.apache.dubbo.rpc.AsyncContext;
 import org.apache.dubbo.rpc.RpcContext;
+import org.apache.dubbo.rpc.RpcContextAttachment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@DubboService(group = "dg", version = "1.0.0", methods = {@Method(name = "helloAsync", timeout = 10000)})
+import java.util.concurrent.CompletableFuture;
+
+@DubboService(group = "dg", version = "1.0.0", methods = {
+        @Method(name = "helloAsync", timeout = 10000),
+        @Method(name = "helloFuture", timeout = 10000)})
 public class GreetingServiceImpl implements GreetingService {
     private static Logger logger = LoggerFactory.getLogger(GreetingServiceImpl.class);
 
@@ -54,5 +59,36 @@ public class GreetingServiceImpl implements GreetingService {
 
         logger.info("sayHello end");
         return "hello, async";
+    }
+
+    @Override
+    public CompletableFuture<String> helloFuture() {
+        // If attachments and context are going to be used in the new thread, startAsync() and signalContextSwitch() must be called.
+        // Otherwise, it is not necessary to call these two methods.
+        AsyncContext asyncContext = RpcContext.startAsync();
+        // 业务执行已从Dubbo线程切换到业务线程，避免了对Dubbo线程池的阻塞。
+        return CompletableFuture.supplyAsync(() -> {
+            asyncContext.signalContextSwitch();
+
+            // 接收参数。 服务提供者对应ServerAttachment，消费者是ClientAttachment
+            RpcContextAttachment attachmentFromClient = RpcContext.getServerAttachment();
+            RpcContextAttachment serverContext = RpcContext.getServerContext();
+            String attachment = attachmentFromClient.getAttachment("consumer-key1");
+            logger.info("consumer-key1 from attachment: " + attachment);
+            // 往调用端传递参数
+            serverContext.setAttachment("server-key1", "server-" + attachment);
+
+            attachment = attachmentFromClient.getAttachment("filters");
+            logger.info("filters from attachment: " + attachment);
+            // 往调用端传递参数
+            serverContext.setAttachment("filters", attachment);
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return "async response.";
+        });
     }
 }
