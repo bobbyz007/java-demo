@@ -16,12 +16,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @DubboService(group = "dg", version = "1.0.0", methods = {
         @Method(name = "helloAsync", timeout = 10000),
-        @Method(name = "helloFuture", timeout = 10000),
-        @Method(name = "findCache", cache = "lru")})
+        @Method(name = "helloFuture", timeout = 10000)})
 public class GreetingServiceImpl implements GreetingService {
     private static Logger logger = LoggerFactory.getLogger(GreetingServiceImpl.class);
 
-    @DubboReference(group = "dg", version = "1.0.0")
+    @DubboReference(group = "dg", version = "1.0.0", check = false)
     private EmbedService embedService;
 
     @Override
@@ -97,8 +96,6 @@ public class GreetingServiceImpl implements GreetingService {
     private final AtomicInteger i = new AtomicInteger();
     @Override
     public String findCache(String id) {
-        String result = "request: " + id + ", response: " + i.getAndIncrement();
-        logger.info("cache: " + result);
-        return result;
+        return "request: " + id + ", response: " + i.getAndIncrement();
     }
 }
