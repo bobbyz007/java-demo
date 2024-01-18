@@ -15,6 +15,11 @@ dependencies {
 
     implementation(libs.bundles.utilLib)
 }
+configurations {
+    all {
+        exclude("org.springframework.boot", "spring-boot-starter-logging")
+    }
+}
 
 // register or create task
 tasks.register<Copy>("copyTask") {

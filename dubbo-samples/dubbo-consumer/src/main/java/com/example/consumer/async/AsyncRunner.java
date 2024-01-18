@@ -3,6 +3,8 @@ package com.example.consumer.async;
 import com.example.client.GreetingService;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.rpc.RpcContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,8 @@ import java.util.concurrent.CompletableFuture;
  */
 @Component
 public class AsyncRunner implements CommandLineRunner {
+    private static Logger logger = LoggerFactory.getLogger(AsyncRunner.class);
+
     @DubboReference(group = "dg", version = "1.0.0")
     private GreetingService greetingService;
 
@@ -23,7 +27,7 @@ public class AsyncRunner implements CommandLineRunner {
         CompletableFuture<String> helloFuture = RpcContext.getServerContext().getCompletableFuture();
         helloFuture.whenComplete((retValue, exception) -> {
             if (exception == null) {
-                System.out.println("return value: " + retValue);
+                logger.info("return value: " + retValue);
             } else {
                 exception.printStackTrace();
             }
@@ -31,7 +35,7 @@ public class AsyncRunner implements CommandLineRunner {
 
         // 非堵塞调用
         CompletableFuture<String> f = RpcContext.getServerContext().asyncCall(() -> greetingService.hello());
-        System.out.println("async call returned: " + f.get());
+        logger.info("async call returned: " + f.get());
         RpcContext.getServerContext().asyncCall(() -> {
             greetingService.hello();
         });

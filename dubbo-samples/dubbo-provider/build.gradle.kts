@@ -1,3 +1,5 @@
+import org.gradle.internal.component.model.Exclude
+
 plugins {
     alias(libs.plugins.spring.boot)
     id("war")
@@ -8,6 +10,9 @@ dependencies {
 
     // spring boot:web, aop, 管理服务，比如应用健康检查等等 http://localhost:8081/actuator/health
     implementation(libs.bundles.springBootLib)
+    /*implementation(libs.spring.boot.starter.web.get().let { "${it.module}:${it.versionConstraint.requiredVersion}" }) {
+        exclude("org.springframework.boot", "spring-boot-starter-logging")
+    }*/
 
     // db libs
     implementation(libs.bundles.dbBaseLib)
@@ -18,10 +23,14 @@ dependencies {
     // dubbo libs
     implementation(libs.bundles.dubboRelatedLib)
 
-    implementation(libs.log4j)
-
     providedRuntime(libs.spring.boot.starter.tomcat)
     testImplementation(libs.spring.boot.starter.test)
 
     implementation(libs.bundles.utilLib)
+
+}
+configurations {
+    all {
+        exclude("org.springframework.boot", "spring-boot-starter-logging")
+    }
 }

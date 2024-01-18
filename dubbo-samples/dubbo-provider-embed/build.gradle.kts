@@ -18,10 +18,13 @@ dependencies {
     // dubbo libs
     implementation(libs.bundles.dubboRelatedLib)
 
-    implementation(libs.log4j)
-
     providedRuntime(libs.spring.boot.starter.tomcat)
     testImplementation(libs.spring.boot.starter.test)
 
     implementation(libs.bundles.utilLib)
+}
+configurations {
+    all {
+        exclude("org.springframework.boot", "spring-boot-starter-logging")
+    }
 }

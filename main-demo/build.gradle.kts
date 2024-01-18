@@ -18,8 +18,6 @@ dependencies {
     // dubbo libs
     implementation(libs.bundles.dubboRelatedLib)
 
-    implementation(libs.log4j)
-
     providedRuntime(libs.spring.boot.starter.tomcat)
     testImplementation(libs.spring.boot.starter.test)
 
@@ -34,6 +32,12 @@ dependencies {
 
     implementation(libs.bundles.resilience4jLib)
     implementation(libs.selenium)
+}
+
+configurations {
+    all {
+        exclude("org.springframework.boot", "spring-boot-starter-logging")
+    }
 }
 
 tasks.bootRun{

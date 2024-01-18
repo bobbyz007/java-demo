@@ -1,7 +1,6 @@
 package com.example.consumer;
 
 import com.example.client.Util;
-import com.example.consumer.controller.ConsumerController;
 import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

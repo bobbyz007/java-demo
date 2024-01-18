@@ -31,6 +31,7 @@ spring-boot-starter-aop = { group = "org.springframework.boot", name = "spring-b
 spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator", version.ref = "springBoot" }
 spring-boot-starter-tomcat = { group = "org.springframework.boot", name = "spring-boot-starter-tomcat", version.ref = "springBoot" }
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test", version.ref = "springBoot" }
+spring-boot-starter-log4j2 = {group = "org.springframework.boot", name = "spring-boot-starter-log4j2", version.ref = "springBoot" }
 
 mybatis-springboot-starter = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter", version.ref = "mybatisSpringBootStarter" }
 mysql-connector = { group = "com.mysql", name = "mysql-connector-j", version.ref = "mysqlConnector" }
@@ -67,7 +68,7 @@ codec = {group = "commons-codec", name = "commons-codec", version.ref = "codec"}
 arthas = {group = "com.taobao.arthas", name = "arthas-common", version.ref = "arthas"}
 
 [bundles]
-springBootLib = ["spring-boot-starter-web", "spring-boot-starter-aop", "spring-boot-starter-actuator"]
+springBootLib = ["spring-boot-starter-web", "spring-boot-starter-aop", "spring-boot-starter-actuator", "spring-boot-starter-log4j2"]
 dbBaseLib = ["mybatis-springboot-starter", "druid-springboot3-starter"]
 dubboRelatedLib = ["nacos-springboot-starter", "dubbo-springboot-starter", "dubbo-registry-nacos", "dubbo-configcenter-nacos",
 "dubbo-metadata-report-nacos", "sentinel-apache-dubbo-adapter", "sentinel-transport-simple-http"]

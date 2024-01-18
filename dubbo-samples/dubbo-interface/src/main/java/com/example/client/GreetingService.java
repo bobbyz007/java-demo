@@ -8,4 +8,6 @@ public interface GreetingService {
     String helloAsync();
 
     CompletableFuture<String> helloFuture();
+
+    String findCache(String id);
 }

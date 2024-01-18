@@ -9,6 +9,6 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.spotbugs.snom:spotbugs-gradle-plugin:5.0.14")
-    testImplementation("junit:junit:4.13")
+    implementation("com.github.spotbugs.snom:spotbugs-gradle-plugin:5.2.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
 }

@@ -12,10 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @DubboService(group = "dg", version = "1.0.0", methods = {
         @Method(name = "helloAsync", timeout = 10000),
-        @Method(name = "helloFuture", timeout = 10000)})
+        @Method(name = "helloFuture", timeout = 10000),
+        @Method(name = "findCache", cache = "lru")})
 public class GreetingServiceImpl implements GreetingService {
     private static Logger logger = LoggerFactory.getLogger(GreetingServiceImpl.class);
 
@@ -90,5 +92,13 @@ public class GreetingServiceImpl implements GreetingService {
             }
             return "async response.";
         });
+    }
+
+    private final AtomicInteger i = new AtomicInteger();
+    @Override
+    public String findCache(String id) {
+        String result = "request: " + id + ", response: " + i.getAndIncrement();
+        logger.info("cache: " + result);
+        return result;
     }
 }
