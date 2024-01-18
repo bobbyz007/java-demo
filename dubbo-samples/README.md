@@ -3,9 +3,9 @@
 
 ## 数据库 MySQL
 安装MySQL，参考官方文档，此处略。  
-创建非root用户：
+创建非root用户(注意加密没有采用最新的caching_sha2_password，因为它要求检索服务器公钥，存在安全风险)：
 ```
-create user 'mysql'@'%' identified by 'mysql';
+create user 'mysql'@'%' identified WITH mysql_native_password by 'mysql';
 GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'%' WITH GRANT OPTION;
 ```
 登录：

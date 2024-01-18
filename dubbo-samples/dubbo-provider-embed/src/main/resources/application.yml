@@ -4,6 +4,7 @@ server:
 spring:
   dataSource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+    # 如果采用最新的caching_sha2_password认证，需要添加allowPublicKeyRetrieval=true
     url: jdbc:mysql://127.0.0.1:3306/testdb?characterEncoding=utf-8&useSSL=false
     username: mysql
     password: mysql

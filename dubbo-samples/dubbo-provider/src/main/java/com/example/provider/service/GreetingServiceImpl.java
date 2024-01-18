@@ -71,15 +71,15 @@ public class GreetingServiceImpl implements GreetingService {
             asyncContext.signalContextSwitch();
 
             // 接收参数。 服务提供者对应ServerAttachment，消费者是ClientAttachment
-            RpcContextAttachment attachmentFromClient = RpcContext.getServerAttachment();
             RpcContextAttachment serverContext = RpcContext.getServerContext();
+            RpcContextAttachment attachmentFromClient = RpcContext.getServerAttachment();
             String attachment = attachmentFromClient.getAttachment("consumer-key1");
-            logger.info("consumer-key1 from attachment: " + attachment);
+            logger.info("attachment[consumer-key1]: " + attachment);
             // 往调用端传递参数
             serverContext.setAttachment("server-key1", "server-" + attachment);
 
             attachment = attachmentFromClient.getAttachment("filters");
-            logger.info("filters from attachment: " + attachment);
+            logger.info("attachment[filters]: " + attachment);
             // 往调用端传递参数
             serverContext.setAttachment("filters", attachment);
 
