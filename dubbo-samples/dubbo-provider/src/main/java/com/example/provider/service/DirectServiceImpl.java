@@ -2,7 +2,6 @@ package com.example.provider.service;
 
 import com.example.client.direct.DirectService;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.apache.dubbo.config.annotation.Method;
 import org.apache.dubbo.rpc.RpcContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

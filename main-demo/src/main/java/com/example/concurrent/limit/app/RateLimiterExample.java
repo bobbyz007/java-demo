@@ -1,6 +1,5 @@
 package com.example.concurrent.limit.app;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.google.common.util.concurrent.RateLimiter;
 
 import java.util.concurrent.TimeUnit;

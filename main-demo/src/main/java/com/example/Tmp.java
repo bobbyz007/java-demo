@@ -7,7 +7,6 @@ public class Tmp {
     public static void main(String[] args) throws InterruptedException {
         //Thread.currentThread().join();
         System.out.println(Tmp.class.getName());
-
     }
 }
 
