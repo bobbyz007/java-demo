@@ -60,7 +60,7 @@ dubbo:
   registry:
     protocol: dubbo
     address: nacos://127.0.0.1:8848
-    register: false # 消费者不用注册到注册中心
+    register: false # 不提供服务，只消费服务
     use-as-config-center: true
     use-as-metadata-center: true
   protocol:
