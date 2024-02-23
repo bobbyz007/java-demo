@@ -54,10 +54,6 @@ mybatis:
     # like column:user_name, property:userName
     map-underscore-to-camel-case: true
 dubbo:
-  service:
-    com.example.client.GreetingService:
-      helloAsync:
-        timeout:10000
   application:
     name: dubbo-provider
     qos-port: 22223

@@ -23,7 +23,7 @@ dependencies {
 
     implementation(libs.bundles.utilLib)
 
-    implementation(libs.netty)
+    implementation(libs.netty.http)
     implementation(libs.jol.cli)
     implementation(libs.bundles.curatorLib)
 

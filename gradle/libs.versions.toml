@@ -51,7 +51,7 @@ poi-ooxml = { group = "org.apache.poi", name = "poi-ooxml", version.ref = "poi" 
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 commons-io = { group = "commons-io", name = "commons-io", version.ref = "commons-io" }
 commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version.ref = "commons-lang3" }
-netty = { group = "io.netty", name = "netty-codec-http", version.ref = "netty" }
+netty-http = { group = "io.netty", name = "netty-codec-http", version.ref = "netty" }
 jol-cli = { group = "org.openjdk.jol", name = "jol-cli", version.ref = "jolCli" }
 curator-framework = { group = "org.apache.curator", name = "curator-framework", version.ref = "curator" }
 curator-recipes = { group = "org.apache.curator", name = "curator-recipes", version.ref = "curator" }
