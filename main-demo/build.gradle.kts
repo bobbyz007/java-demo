@@ -32,6 +32,7 @@ dependencies {
 
     implementation(libs.bundles.resilience4jLib)
     implementation(libs.selenium)
+    implementation(libs.kafka.clients)
 }
 
 configurations {

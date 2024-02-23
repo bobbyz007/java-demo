@@ -24,6 +24,7 @@ selenium = "4.16.1"
 hutool = "5.8.25"
 codec = "1.16.0"
 arthas = "3.7.2"
+kafka = "3.6.1"
 
 [libraries]
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web", version.ref = "springBoot" }
@@ -66,6 +67,7 @@ selenium = {group = "org.seleniumhq.selenium", name = "selenium-java", version.r
 hutool = {group = "cn.hutool", name = "hutool-all", version.ref = "hutool"}
 codec = {group = "commons-codec", name = "commons-codec", version.ref = "codec"}
 arthas = {group = "com.taobao.arthas", name = "arthas-common", version.ref = "arthas"}
+kafka-clients = {group = "org.apache.kafka", name = "kafka-clients", version.ref = "kafka"}
 
 [bundles]
 springBootLib = ["spring-boot-starter-web", "spring-boot-starter-aop", "spring-boot-starter-actuator", "spring-boot-starter-log4j2"]
