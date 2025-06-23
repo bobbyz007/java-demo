@@ -74,7 +74,7 @@ public class WaitNotifyOrNotifyAll2 {
             if (isFull()) {
                 throw new IndexOutOfBoundsException();
             } else {
-                innerList.add(RandomStringUtils.randomNumeric(5));
+                innerList.add(RandomStringUtils.secure().nextNumeric(5));
             }
             System.out.println(Thread.currentThread().toString() + " add " +innerList);
 

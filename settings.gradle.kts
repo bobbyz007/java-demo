@@ -1,3 +1,11 @@
+pluginManagement {
+    repositories {
+        maven("https://maven.aliyun.com/repository/public/")
+        maven("https://maven.aliyun.com/repository/gradle-plugin")
+        maven("https://mirrors.huaweicloud.com/repository/maven/")
+        gradlePluginPortal()
+    }
+}
 dependencyResolutionManagement {
     versionCatalogs {
         /**
@@ -16,6 +24,7 @@ dependencyResolutionManagement {
      */
     repositories {
         maven("https://maven.aliyun.com/repository/public/")
+        maven("https://maven.aliyun.com/repository/gradle-plugin")
         maven("https://mirrors.huaweicloud.com/repository/maven/")
         // 或者公司本地仓库
         mavenCentral()
