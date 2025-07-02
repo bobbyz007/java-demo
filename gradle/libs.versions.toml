@@ -4,7 +4,7 @@ mybatisSpringBootStarter = "3.0.4"
 mysqlConnector = "9.3.0"
 redissonSpringBootStarter = "3.50.0"
 druidSpringBootStarter = "1.2.25"
-nacosConfigSpringBootStarter = "0.2.12"
+nacosConfigSpringAlibaba = "2023.0.3.3"
 dubbo = "3.3.4"
 sentinel = "1.8.8"
 log4j = "2.25.0"
@@ -38,7 +38,7 @@ mybatis-springboot-starter = { group = "org.mybatis.spring.boot", name = "mybati
 mysql-connector = { group = "com.mysql", name = "mysql-connector-j", version.ref = "mysqlConnector" }
 redisson-springboot-starter = { group = "org.redisson", name = "redisson-spring-boot-starter", version.ref = "redissonSpringBootStarter" }
 druid-springboot3-starter = { group = "com.alibaba", name = "druid-spring-boot-3-starter", version.ref = "druidSpringBootStarter" }
-nacos-springboot-starter = { group = "com.alibaba.boot", name = "nacos-config-spring-boot-starter", version.ref = "nacosConfigSpringBootStarter" }
+nacos-config-spring-alibaba = { group = "com.alibaba.cloud", name = "spring-alibaba-nacos-config", version.ref = "nacosConfigSpringAlibaba" }
 dubbo-springboot-starter = { group = "org.apache.dubbo", name = "dubbo-spring-boot-starter", version.ref = "dubbo" }
 dubbo-registry-nacos = { group = "org.apache.dubbo", name = "dubbo-registry-nacos", version.ref = "dubbo" }
 dubbo-configcenter-nacos = { group = "org.apache.dubbo", name = "dubbo-configcenter-nacos", version.ref = "dubbo" }
@@ -72,7 +72,7 @@ kafka-clients = {group = "org.apache.kafka", name = "kafka-clients", version.ref
 [bundles]
 springBootLib = ["spring-boot-starter-web", "spring-boot-starter-aop", "spring-boot-starter-actuator", "spring-boot-starter-log4j2"]
 dbBaseLib = ["mybatis-springboot-starter", "druid-springboot3-starter"]
-dubboRelatedLib = ["nacos-springboot-starter", "dubbo-springboot-starter", "dubbo-registry-nacos", "dubbo-configcenter-nacos",
+dubboRelatedLib = ["nacos-config-spring-alibaba", "dubbo-springboot-starter", "dubbo-registry-nacos", "dubbo-configcenter-nacos",
 "dubbo-metadata-report-nacos", "sentinel-apache-dubbo-adapter", "sentinel-transport-simple-http"]
 utilLib = ["jsoup", "poi", "poi-ooxml", "guava", "commons-io", "commons-lang3", "hutool"]
 curatorLib = ["curator-framework", "curator-recipes"]
