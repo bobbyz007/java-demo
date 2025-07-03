@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * testing: http://localhost:8083/dubboconsumer/hello
+ * testing: http://localhost:8081/consumer/hello
  */
 @RestController
 @RequestMapping("consumer")
