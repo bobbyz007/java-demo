@@ -1,7 +1,6 @@
 package com.example.mvc.controller;
 
 import com.alibaba.nacos.api.config.annotation.NacosValue;
-import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@NacosPropertySource(dataId = "test-data", groupId = "DEFAULT_GROUP",   autoRefreshed = true)
 @RequestMapping("nacosconfig")
 public class NacosConfigController {
     @NacosValue(value = "${key1:default}", autoRefreshed = true)

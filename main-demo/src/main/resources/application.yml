@@ -65,6 +65,11 @@ mybatis:
   configuration:
     # like column:user_name, property:userName
     map-underscore-to-camel-case: true
+config:
+  import:
+    # data-id is springboot3x.properties
+    - nacos:springboot3x.properties?group=DEFAULT_GROUP
+
 nacos:
   config:
     # 主配置; 主要是加载 静态配置 文件的; SpringBoot在启动的时候会先去Nacos中读取配置文件然后加载到Environment中; 静态配置不启用自动刷新;

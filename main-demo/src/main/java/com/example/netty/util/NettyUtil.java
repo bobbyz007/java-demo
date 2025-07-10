@@ -5,6 +5,7 @@ import io.netty.buffer.*;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoop;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.nio.NioIoHandler;
 import io.netty.resolver.AbstractAddressResolver;
 import io.netty.resolver.AddressResolver;
 import io.netty.resolver.DefaultNameResolver;
@@ -114,7 +115,7 @@ public class NettyUtil {
      * @throws InterruptedException
      */
     static void nameResolver() throws ExecutionException, InterruptedException {
-        EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+        EventLoopGroup eventLoopGroup = new MultiThreadIoEventLoopGroup(NioIoHandler.newFactory());
         // 创建name resolver， 其实就是解析主机名或ip字符串 -> InetAddress
         DefaultNameResolver resolver = new DefaultNameResolver(eventLoopGroup.next());
 
@@ -161,7 +162,7 @@ public class NettyUtil {
     }
 
     static void eventLoopGroup() throws InterruptedException, ExecutionException {
-        EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+        EventLoopGroup eventLoopGroup = new MultiThreadIoEventLoopGroup(NioIoHandler.newFactory());
 
         // 固定在某一个event loop中执行
         eventLoopGroup.schedule(() -> {
